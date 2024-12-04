@@ -1,6 +1,6 @@
-🎵 HarMonia: Online Music Player
+🎵 Harmonia: Online Music Player
 📖 Project Description
-MyMusic is a feature-rich online music player that allows users to search, stream, and organize their favorite music. With advanced playback controls, personalized playlists, and seamless integration with a music API, MyMusic delivers an unparalleled music streaming experience.
+Harmonia is a feature-rich online music player that allows users to search, stream, and organize their favorite music. With advanced playback controls, personalized playlists, and seamless integration with a music API, MyMusic delivers an unparalleled music streaming experience.
 
 🚀 Features
 User Authentication: Secure user registration, login, and logout functionality.
@@ -8,6 +8,7 @@ Music Search: Search for songs by title, artist, or genre.
 Playlists Management: Create, update, and delete personalized playlists.
 Music Playback Controls: Play, pause, skip, forward, rewind, and adjust volume.
 Responsive Design: Optimized for mobile, tablet, and desktop.
+
 🛠️ Tech Stack
 Frontend
 Framework: React.js
@@ -18,6 +19,7 @@ Database: MongoDB (NoSQL)
 Authentication: JSON Web Tokens (JWT)
 Third-Party APIs
 Spotify API or Last.fm API for music data.
+
 📋 Getting Started
 Follow these instructions to get a copy of the project up and running locally.
 
@@ -54,6 +56,7 @@ Open the app in your browser:
 
 Frontend: http://localhost:3000
 Backend: http://localhost:5000/api
+
 📂 Project Structure
 bash
 Copier le code
@@ -70,6 +73,7 @@ MyMusic/
 ├── .env                  # Environment variables
 ├── package.json          # Project dependencies
 └── README.md             # Project documentation
+
 🗓️ Project Timeline
 Week	Task
 1	Initial setup & landing page design
