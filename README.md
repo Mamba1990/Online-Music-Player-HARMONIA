@@ -101,6 +101,7 @@ Before running this project, make sure you have:
   ```bash
   cd ../frontend
   npm test
+
 ## 🚀 Deployment
 
 1. Frontend: Deploy on platforms like Netlify or Vercel.
