@@ -1,6 +1,6 @@
-# 🎵 Online Music Player
+# 🎵 Online Music Player: Harmonia
 
-An online music streaming platform where users can create playlists, search for songs, and enjoy music with advanced playback controls.
+Harmonia is an online music streaming platform where users can create playlists, search for songs, and enjoy music with advanced playback controls.
 
 ---
 
