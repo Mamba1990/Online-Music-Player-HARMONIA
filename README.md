@@ -54,3 +54,18 @@ Before running this project, make sure you have:
    PORT=5000
    MONGO_URI=your-mongodb-connection-string
    API_KEY=your-music-api-key
+## 🖥️ Usage
+
+1. Start the backend server:
+   ```bash
+   cd backend
+   npm start
+
+2. Start the frontend development server:
+   ```bash
+   cd ../frontend
+   npm start
+
+3. Open your browser and visit:
+   ```arduino
+   http://localhost:3000  
