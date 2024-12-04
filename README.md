@@ -68,4 +68,25 @@ Before running this project, make sure you have:
 
 3. Open your browser and visit:
    ```arduino
-   http://localhost:3000  
+   http://localhost:3000
+
+## 📂 Project Structure
+   ```graphql
+
+ online-music-player/
+│
+├── backend/                # Backend source code
+│   ├── models/             # MongoDB models
+│   ├── routes/             # API routes
+│   ├── controllers/        # API logic
+│   └── server.js           # Server entry point
+│
+├── frontend/               # Frontend source code
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── pages/          # Application pages
+│   │   ├── App.js          # Main React app
+│   │   └── index.js        # React DOM entry point
+│
+└── README.md               # Project documentation
+
