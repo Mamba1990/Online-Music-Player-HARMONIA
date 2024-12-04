@@ -101,15 +101,8 @@ Before running this project, make sure you have:
 
 1. Run unit tests for the backend:
    ```bash
-
    cd backend
    npm test
-
-2. Run unit tests for the frontend:
-  ```bash
-
-  cd ../frontend
-  npm test
 
 ---
 
