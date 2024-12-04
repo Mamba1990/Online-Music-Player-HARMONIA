@@ -90,3 +90,29 @@ Before running this project, make sure you have:
 │
 └── README.md               # Project documentation
 
+## 🧪 Testing
+
+1. Run unit tests for the backend:
+   ```bash
+   cd backend
+   npm test
+
+2. Run unit tests for the frontend:
+  ```bash
+  cd ../frontend
+  npm test
+## 🚀 Deployment
+
+1. Frontend: Deploy on platforms like Netlify or Vercel.
+2. Backend: Deploy on Heroku, AWS, or DigitalOcean.
+
+## 📅 Roadmap
+
+ Build Landing Page
+ Integrate Music API
+ Implement Dark Mode
+ Add Social Sharing Features
+
+
+
+
