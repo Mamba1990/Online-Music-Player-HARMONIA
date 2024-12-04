@@ -37,3 +37,20 @@ Before running this project, make sure you have:
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/online-music-player.git
+
+2. Install dependencies for the backend:
+   ```bash
+   cd backend
+   npm install
+
+3. Install dependencies for the frontend:
+   ```bash
+   cd ../frontend
+   npm install
+
+4. Configure environment variables:
+   Create a .env file in the backend directory with:
+   ```makefile
+   PORT=5000
+   MONGO_URI=your-mongodb-connection-string
+   API_KEY=your-music-api-key
