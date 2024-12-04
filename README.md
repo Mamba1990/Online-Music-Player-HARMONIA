@@ -95,10 +95,9 @@ Before running this project, make sure you have:
 └── README.md               # Project documentation
 
 ---
-
 ## 🧪 Testing
 
-1. Run unit tests for the backend:
+1. **Run unit tests for the backend**:
    ```bash
    cd backend
    npm test
@@ -112,14 +111,14 @@ Before running this project, make sure you have:
 
 ---
 
-## 📅 Roadmap
+## 📅  Roadmap
 
  Build Landing Page
  Integrate Music API
  Implement Dark Mode
  Add Social Sharing Features
 
----
+
 
 
 
