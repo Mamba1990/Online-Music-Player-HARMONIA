@@ -54,6 +54,9 @@ Before running this project, make sure you have:
    PORT=5000
    MONGO_URI=your-mongodb-connection-string
    API_KEY=your-music-api-key
+   
+---
+
 ## 🖥️ Usage
 
 1. Start the backend server:
@@ -69,6 +72,8 @@ Before running this project, make sure you have:
 3. Open your browser and visit:
    ```arduino
    http://localhost:3000
+   
+ ---  
 
 ## 📂 Project Structure
    ```graphql
@@ -90,6 +95,8 @@ Before running this project, make sure you have:
 │
 └── README.md               # Project documentation
 
+---
+
 ## 🧪 Testing
 
 1. Run unit tests for the backend:
@@ -102,10 +109,14 @@ Before running this project, make sure you have:
   cd ../frontend
   npm test
 
+---
+
 ## 🚀 Deployment
 
 1. Frontend: Deploy on platforms like Netlify or Vercel.
 2. Backend: Deploy on Heroku, AWS, or DigitalOcean.
+
+---
 
 ## 📅 Roadmap
 
