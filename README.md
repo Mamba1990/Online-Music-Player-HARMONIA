@@ -6,10 +6,10 @@ Harmonia is an online music streaming platform where users can create playlists,
 
 ## 🚀 Features
 
-- **Create Personalized Playlists**: Organize your favorite tracks into playlists.
-- **Search for Music**: Search by song title, artist, or genre.
-- **Advanced Playback Controls**: Play, pause, skip, forward, rewind, and control the volume.
-- **Responsive Design**: Works seamlessly on desktops, tablets, and mobile devices.
+- **User Authentication**: Secure user registration, login, and logout functionality.
+- **Music Search**: search for songs by title, artist, or genre
+- **Music Playback Controls**: Play, pause, skip, forward, rewind, and adjust volume.
+- **Responsive Design**: Optimized for mobile, tablet, and desktop.
 
 ---
 
@@ -29,6 +29,7 @@ Before running this project, make sure you have:
 - Node.js installed
 - MongoDB set up locally or hosted on a cloud service
 - API keys for the chosen Music API (e.g., Spotify, Last.fm)
+- Git
 
 ---
 
@@ -36,7 +37,8 @@ Before running this project, make sure you have:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/online-music-player.git
+   git clone https://github.com/Mamba1990/online-music-player-HARMONIA.git
+   cd online-music-player-HARMONIA
 
 2. Install dependencies for the backend:
    ```bash
@@ -71,28 +73,27 @@ Before running this project, make sure you have:
 
 3. Open your browser and visit:
    ```arduino
-   http://localhost:3000
+   - Frontend: http://localhost:3000
+   - Backend: http://localhost:5000/api
    
  ---  
 
 ## 📂 Project Structure
    ```graphql
- online-music-player/
-│
-├── backend/                # Backend source code
-│   ├── models/             # MongoDB models
-│   ├── routes/             # API routes
-│   ├── controllers/        # API logic
-│   └── server.js           # Server entry point
-│
-├── frontend/               # Frontend source code
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── pages/          # Application pages
-│   │   ├── App.js          # Main React app
-│   │   └── index.js        # React DOM entry point
-│
-└── README.md               # Project documentation
+Online-Music-Player-HARMONIA/
+├── client/               # Frontend (React app)
+│   ├── public/           # Static assets
+│   └── src/              # React components, pages, and styles
+├── server/               # Backend (Node.js + Express)
+│   ├── models/           # Database schemas
+│   ├── routes/           # API endpoints
+│   ├── controllers/      # Request handlers
+│   ├── utils/            # Helper functions
+│   └── server.js         # Entry point
+├── .env                  # Environment variables
+├── package.json          # Project dependencies
+└── README.md             # Project documentation
+
    ```
 
 ---
