@@ -94,7 +94,7 @@ Before running this project, make sure you have:
 │
 └── README.md               # Project documentation
 
-## 🧪 Testing
+## Testing
 
 1. Run unit tests for the backend:
    ```bash
