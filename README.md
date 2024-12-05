@@ -76,7 +76,7 @@ Before running this project, make sure you have:
  ---  
 
 ## 📂 Project Structure
-   ```graphql
+   
  online-music-player/
 │
 ├── backend/                # Backend source code
