@@ -94,8 +94,6 @@ Before running this project, make sure you have:
 │
 └── README.md               # Project documentation
 
----
-
 ## 🧪 Testing
 
 1. Run unit tests for the backend:
@@ -103,7 +101,3 @@ Before running this project, make sure you have:
    cd backend
    npm test
 
-
-
-
---- 
