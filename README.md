@@ -24,12 +24,12 @@ Harmonia is an online music streaming platform where users can create playlists,
 
 ## 📋 Prerequisites
 
-Before running this project, make sure you have:
+Before running this project, ensure you have the following installed on your system:
 
-- Node.js installed
+- [Node.js]: (Download Node.js)
 - MongoDB set up locally or hosted on a cloud service
 - API keys for the chosen Music API (e.g., Spotify, Last.fm)
-- Git
+- [Git]: (Install Git)
 
 ---
 
