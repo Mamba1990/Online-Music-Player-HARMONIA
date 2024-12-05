@@ -53,7 +53,7 @@ Before running this project, ensure you have the following installed on your sys
  
    - Navigate to the client/ folder:
    ```bash
-   cd ../client
+    cd ../client
    
    - Install the required dependencies:
    ```bash
