@@ -64,7 +64,7 @@ Before running this project, ensure you have the following installed on your sys
 4. Configure environment variables:
    
    - Create a .env file in the server/ directory and add the following:
-   - 
+     
    ```plaintext
    PORT=5000
    MONGO_URI=your-mongodb-connection-string
