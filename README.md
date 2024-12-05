@@ -19,9 +19,9 @@ Harmonia is an online music streaming platform where users can create playlists,
 - **Framework**: React.js
 **Backend**
 - **Server**: Node.js with express
-- **Database***: MongoDB(NoSQL)
+- **Database**: MongoDB(NoSQL)
 - **Authentication**: JSON Web Tokens (JWT)
-**Third-Party APIs**:
+**Third-Party APIs**
 -Spotify API / Last.fm API / YouTube Data API
 
 ---
