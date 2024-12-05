@@ -52,11 +52,12 @@ Before running this project, ensure you have the following installed on your sys
 3. **Set up the frontend**:
  
    - Navigate to the client/ folder:
-   ```bash
-    cd ../client
+     ```bash
+     cd ../client
+   
    - Install the required dependencies:
-   ```bash
-    npm install
+      ```bash
+      npm install
 
 4. **Configure environment variables**:
    
