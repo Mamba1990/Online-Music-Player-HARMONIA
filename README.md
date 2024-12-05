@@ -129,9 +129,10 @@ Online-Music-Player-HARMONIA/
 
 ---
 
-## 🧪 Testing
+## 🗓️ Project Timeline
 
-1. **Run unit tests for the backend**:
-   ```bash
-   cd backend
-   npm test
+Week	Task
+1	Initial setup & landing page design
+2	Backend development & API integration
+3	Core features: Playlist & playback
+4	Testing, deployment, and presentation
