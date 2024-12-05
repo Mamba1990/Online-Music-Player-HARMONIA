@@ -37,9 +37,9 @@ Before running this project, ensure you have the following installed on your sys
 
 1. Clone the repository:
    
-   ```bash
-   git clone https://github.com/Mamba1990/online-music-player-HARMONIA.git
-   cd online-music-player-HARMONIA
+```bash
+git clone https://github.com/Mamba1990/online-music-player-HARMONIA.git
+cd online-music-player-HARMONIA
 
 3. **Set up the backend**:
 
