@@ -24,7 +24,7 @@ Harmonia is an online music streaming platform where users can create playlists,
 - **Authentication**: JSON Web Tokens (JWT)
   
 **Third-Party APIs**
--Spotify API / Last.fm API / YouTube Data API
+- Spotify API / Last.fm API / YouTube Data API
 
 ---
 
