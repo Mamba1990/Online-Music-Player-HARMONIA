@@ -93,6 +93,7 @@ Before running this project, make sure you have:
 │   │   └── index.js        # React DOM entry point
 │
 └── README.md               # Project documentation
+   ```
 
 ---
 
