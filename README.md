@@ -35,7 +35,7 @@ Before running this project, ensure you have the following installed on your sys
 
 ## ⚙️ Installation
 
-1.** Clone the repository**:
+1. Clone the repository:
    ```bash
    git clone https://github.com/Mamba1990/online-music-player-HARMONIA.git
    cd online-music-player-HARMONIA
@@ -62,12 +62,11 @@ Before running this project, ensure you have the following installed on your sys
 4. **Configure environment variables**:
    
    - Create a .env file in the server/ directory and add the following:
-     
-   ```plaintext
-   PORT=5000
-   MONGO_URI=your-mongodb-connection-string
-   API_KEY=your-music-api-key
-   ```
+      ```plaintext
+      PORT=5000
+      MONGO_URI=your-mongodb-connection-string
+      API_KEY=your-music-api-key
+      ```
    - Replace your-mongodb-connection-string and your-music-api-key with your actual values.
    
 ---
