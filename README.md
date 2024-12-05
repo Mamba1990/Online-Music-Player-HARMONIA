@@ -35,12 +35,12 @@ Before running this project, ensure you have the following installed on your sys
 
 ## ⚙️ Installation
 
-1. Clone the repository:
+1.** Clone the repository**:
    ```bash
    git clone https://github.com/Mamba1990/online-music-player-HARMONIA.git
    cd online-music-player-HARMONIA
 
-2. Set up the backend:
+2. **Set up the backend**:
 
    - Navigate to the server/ folder:
      ```bash
@@ -49,19 +49,17 @@ Before running this project, ensure you have the following installed on your sys
      ```bash
      npm install
 
-3. Set up the frontend:
+3. **Set up the frontend**:
  
    - Navigate to the client/ folder:
-     
    ```bash
    cd ../client
    
    - Install the required dependencies:
-   
    ```bash
    npm install
 
-4. Configure environment variables:
+4. **Configure environment variables**:
    
    - Create a .env file in the server/ directory and add the following:
      
