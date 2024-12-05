@@ -136,3 +136,22 @@ Week	Task
 2	Backend development & API integration
 3	Core features: Playlist & playback
 4	Testing, deployment, and presentation
+
+---
+
+## 🔗 Live Demo
+
+Coming soon! (Once deployed, add the live link here.)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you’d like to contribute:
+1. Fork the project.
+2. Create a feature branch: git checkout -b feature-name.
+3. Commit changes: git commit -m 'Add some feature'.
+4. Push to the branch: git push origin feature-name.
+5. Open a pull request.
+
+---
