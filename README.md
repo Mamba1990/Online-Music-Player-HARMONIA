@@ -155,3 +155,16 @@ Contributions are welcome! If you’d like to contribute:
 5. Open a pull request.
 
 ---
+
+## 🛡️ License
+
+This project is licensed under the MIT License.
+
+---
+
+## 📧 Contact
+
+For questions or feedback, contact:
+- **Email**: hafsa.daoudim@gmail.com
+- **GitHub**: [Mamba1990](https://github.com/Mamba1990)
+- **LinkedIn**: [My profile](
