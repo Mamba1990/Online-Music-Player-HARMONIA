@@ -57,7 +57,7 @@ Before running this project, ensure you have the following installed on your sys
    
    - Install the required dependencies:
    ```bash
-   npm install
+    npm install
 
 4. **Configure environment variables**:
    
