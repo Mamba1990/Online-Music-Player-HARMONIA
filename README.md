@@ -26,10 +26,10 @@ Harmonia is an online music streaming platform where users can create playlists,
 
 Before running this project, ensure you have the following installed on your system:
 
-- Node.js: [Download](https://nodejs.org/)
-- MongoDB set up locally or hosted on a cloud service
+- Node.js: [Download Node.js](https://nodejs.org/)
+- MongoDB : set up locally or hosted on a cloud service, [install MongoDB](https://www.mongodb.com/try/download/community)
 - API keys for the chosen Music API (e.g., Spotify, Last.fm)
-- [Git]: (Install Git)
+- Git: [Install Git](https://git-scm.com/)
 
 ---
 
