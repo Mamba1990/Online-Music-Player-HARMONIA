@@ -41,27 +41,31 @@ Before running this project, ensure you have the following installed on your sys
    cd online-music-player-HARMONIA
 
 2. Set up the backend:
+3. 
    - Navigate to the server/ folder:
      ```bash
      cd server
-   -Install the required dependencies:
+   - Install the required dependencies:
      ```bash
      npm install
 
-3. Set up the frontend:
+4. Set up the frontend:
+5. 
    - Set up the frontend:
    ```bash
    cd ../client
-   -Install the required dependencies:
+   
+   - Install the required dependencies:
    ```bash
    npm install
 
-4. Configure environment variables:
+6. Configure environment variables:
    - Create a .env file in the server/ directory and add the following:
    ```plaintext
    PORT=5000
    MONGO_URI=your-mongodb-connection-string
    API_KEY=your-music-api-key
+   ```
    - Replace your-mongodb-connection-string and your-music-api-key with your actual values.
    
 ---
