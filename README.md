@@ -79,20 +79,26 @@ Before running this project, ensure you have the following installed on your sys
 
 ## 🖥️ Usage
 
-1. Start the backend server:
+1. **Start the backend server**:
+   
+   - Navigate to the server/ folder:
+     
    ```bash
-   cd backend
+   cd server
    npm start
 
-2. Start the frontend development server:
+3. **Start the frontend development server**:
+   
+   - Navigate to the client/ folder:
+      
    ```bash
-   cd ../frontend
+   cd ../client
    npm start
 
-3. Open your browser and visit:
+4. **Open your browser and visit**:
+   
    ```arduino
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:5000/api
+   http://localhost:3000
    
  ---  
 
