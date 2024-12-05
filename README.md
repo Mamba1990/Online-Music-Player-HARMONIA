@@ -177,4 +177,4 @@ This project is licensed under the MIT License.
 For questions or feedback, contact:
 - **Email**: hafsa.daoudim@gmail.com
 - **GitHub**: [Mamba1990](https://github.com/Mamba1990)
-- **LinkedIn**: [My profile](
+- **LinkedIn**: [My profile](https://www.linkedin.com/in/hafsadaoudim/)
