@@ -95,5 +95,4 @@ Before running this project, make sure you have:
 └── README.md               # Project documentation
 
 ---
-
 ## 🧪 Testing
