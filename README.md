@@ -45,19 +45,24 @@ Before running this project, ensure you have the following installed on your sys
      ```bash
      cd server
    -Install the required dependencies:
+     ```bash
      npm install
 
-4. Install dependencies for the frontend:
+3. Set up the frontend:
+   - Set up the frontend:
    ```bash
-   cd ../frontend
+   cd ../client
+   -Install the required dependencies:
+   ```bash
    npm install
 
-5. Configure environment variables:
-   Create a .env file in the backend directory with:
-   ```makefile
+4. Configure environment variables:
+   - Create a .env file in the server/ directory and add the following:
+   ```plaintext
    PORT=5000
    MONGO_URI=your-mongodb-connection-string
    API_KEY=your-music-api-key
+   - Replace your-mongodb-connection-string and your-music-api-key with your actual values.
    
 ---
 
