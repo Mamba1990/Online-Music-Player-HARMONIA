@@ -121,9 +121,14 @@ Online-Music-Player-HARMONIA/
 │   ├── controllers/      # Request handlers
 │   ├── utils/            # Helper functions
 │   └── server.js         # Entry point
+├── tests/                # Test files
+│   ├── playlists.test.js # Playlist route tests
+│   ├── tracks.test.js    # Track route tests
+│   └── users.test.js     # User route tests
 ├── .env                  # Environment variables
 ├── package.json          # Project dependencies
 └── README.md             # Project documentation
+
 
    ```
 
