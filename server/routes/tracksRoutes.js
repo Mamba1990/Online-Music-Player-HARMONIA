@@ -1,72 +1,83 @@
 import express from 'express';
+import Track from '../models/Track.js'; // Import the Track model
 
 const tracksRouter = express.Router();
 
-// Mock data for tracks
-let tracks = [
-    { id: 1, title: 'Track 1', artist: 'Artist 1', album: 'Album 1' },
-    { id: 2, title: 'Track 2', artist: 'Artist 2', album: 'Album 2' },
-    { id: 3, title: 'Track 3', artist: 'Artist 3', album: 'Album 3' },
-];
-
-let nextTrackId = 4; // Counter for the next track ID
-
 // 1. Fetch all tracks
-tracksRouter.get('/', (req, res) => {
-    res.json(tracks);
+tracksRouter.get('/', async (req, res) => {
+    try {
+        const tracks = await Track.find(); // Fetch all tracks from MongoDB
+        res.json(tracks);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // 2. Fetch a specific track by ID
-tracksRouter.get('/:id', (req, res) => {
+tracksRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const track = tracks.find((t) => t.id === parseInt(id));
-    if (!track) {
-        return res.status(404).send(`Track with ID ${id} not found.`);
+    try {
+        const track = await Track.findById(id); // Find track by ID
+        if (!track) {
+            return res.status(404).json({ message: `Track with ID ${id} not found.` });
+        }
+        res.json(track);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-    res.json(track);
 });
 
 // 3. Create a new track
-tracksRouter.post('/', (req, res) => {
+tracksRouter.post('/', async (req, res) => {
     const { title, artist, album } = req.body;
     if (!title || !artist || !album) {
-        return res.status(400).send('Title, artist, and album are required.');
+        return res.status(400).json({ message: 'Title, artist, and album are required.' });
     }
 
-    const newTrack = { id: nextTrackId++, title, artist, album };
-    tracks.push(newTrack);
-    res.status(201).json(newTrack);
+    try {
+        const newTrack = new Track({ title, artist, album }); // Create a new track instance
+        await newTrack.save(); // Save the track to the database
+        res.status(201).json(newTrack);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // 4. Update an existing track by ID
-tracksRouter.put('/:id', (req, res) => {
+tracksRouter.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { title, artist, album } = req.body;
 
-    const track = tracks.find((t) => t.id === parseInt(id));
-    if (!track) {
-        return res.status(404).send(`Track with ID ${id} not found.`);
+    try {
+        const track = await Track.findById(id); // Find track by ID
+        if (!track) {
+            return res.status(404).json({ message: `Track with ID ${id} not found.` });
+        }
+
+        if (title) track.title = title;
+        if (artist) track.artist = artist;
+        if (album) track.album = album;
+
+        await track.save(); // Save the updated track
+        res.json({ message: `Track with ID ${id} has been updated.`, track });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-
-    if (title) track.title = title;
-    if (artist) track.artist = artist;
-    if (album) track.album = album;
-
-    res.json({ message: `Track with ID ${id} has been updated.`, track });
 });
 
 // 5. Delete a track by ID
-tracksRouter.delete('/:id', (req, res) => {
+tracksRouter.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    const index = tracks.findIndex((t) => t.id === parseInt(id));
-    if (index === -1) {
-        return res.status(404).send(`Track with ID ${id} not found.`);
-    }
 
-    tracks.splice(index, 1);
-    res.send(`Track with ID ${id} has been deleted.`);
+    try {
+        const track = await Track.findByIdAndDelete(id); // Delete track by ID
+        if (!track) {
+            return res.status(404).json({ message: `Track with ID ${id} not found.` });
+        }
+        res.json({ message: `Track with ID ${id} has been deleted.` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 export default tracksRouter;
-
-
