@@ -1,21 +1,12 @@
-# Node modules folder
+# Ignore node_modules
 node_modules/
 
-# Logs
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Ignore logs
+*.log
 
-# Environment files
+# Ignore environment variable files (adjust to your specific needs)
 .env
 
-# OS-specific files
+# Ignore OS-specific files (adjust as needed)
 .DS_Store
 Thumbs.db
-
-# VS Code specific files
-.vscode/
-
-# Other sensitive files (optional)
-.idea/
-*.swp
