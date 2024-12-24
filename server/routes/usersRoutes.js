@@ -7,9 +7,9 @@ const usersRouter = express.Router();
 usersRouter.get('/', async (req, res) => {
     try {
         const users = await User.find();
-        res.json(users);
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `Failed to fetch users: ${error.message}` });
     }
 });
 
@@ -21,9 +21,9 @@ usersRouter.get('/:id', async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: `User with ID ${id} not found.` });
         }
-        res.json(user);
+        res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `Failed to fetch user: ${error.message}` });
     }
 });
 
@@ -35,11 +35,16 @@ usersRouter.post('/', async (req, res) => {
     }
 
     try {
-        const newUser = new User({ name, email, password }); // Create a new user instance
-        await newUser.save(); // Save the user to the database
-        res.status(201).json(newUser);
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'A user with this email already exists.' });
+        }
+
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+        res.status(201).json({ message: 'User created successfully.', user: newUser });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `Failed to create user: ${error.message}` });
     }
 });
 
@@ -54,14 +59,15 @@ usersRouter.put('/:id', async (req, res) => {
             return res.status(404).json({ message: `User with ID ${id} not found.` });
         }
 
+        // Update only provided fields
         if (name) user.name = name;
         if (email) user.email = email;
         if (password) user.password = password;
 
-        await user.save(); // Save the updated user
-        res.json({ message: `User with ID ${id} has been updated.`, user });
+        await user.save();
+        res.status(200).json({ message: 'User updated successfully.', user });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `Failed to update user: ${error.message}` });
     }
 });
 
@@ -74,13 +80,14 @@ usersRouter.delete('/:id', async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: `User with ID ${id} not found.` });
         }
-        res.json({ message: `User with ID ${id} has been deleted.` });
+        res.status(200).json({ message: 'User deleted successfully.', user });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `Failed to delete user: ${error.message}` });
     }
 });
 
 export default usersRouter;
+
 
 
 
