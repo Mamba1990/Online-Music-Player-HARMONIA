@@ -6,10 +6,10 @@ const playlistsRouter = express.Router();
 // 1. Fetch all playlists
 playlistsRouter.get('/', async (req, res) => {
     try {
-        const playlists = await Playlist.find(); // Fetch all playlists from MongoDB
-        res.json(playlists);
+        const playlists = await Playlist.find().populate('tracks');
+        res.status(200).json({ success: true, data: playlists });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
@@ -17,50 +17,51 @@ playlistsRouter.get('/', async (req, res) => {
 playlistsRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const playlist = await Playlist.findById(id); // Find playlist by ID
+        const playlist = await Playlist.findById(id).populate('tracks');
         if (!playlist) {
-            return res.status(404).json({ message: `Playlist with ID ${id} not found.` });
+            return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
         }
-        res.json(playlist);
+        res.status(200).json({ success: true, data: playlist });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
 // 3. Create a new playlist
 playlistsRouter.post('/', async (req, res) => {
-    const { name, description } = req.body;
-    if (!name || !description) {
-        return res.status(400).json({ message: 'Name and description are required.' });
+    const { name, description, tracks } = req.body;
+    if (!name) {
+        return res.status(400).json({ success: false, message: 'Name is required.' });
     }
 
     try {
-        const newPlaylist = new Playlist({ name, description }); // Create a new playlist instance
-        await newPlaylist.save(); // Save playlist to the database
-        res.status(201).json(newPlaylist);
+        const newPlaylist = new Playlist({ name, description, tracks });
+        await newPlaylist.save();
+        res.status(201).json({ success: true, data: newPlaylist });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
 // 4. Update an existing playlist by ID
 playlistsRouter.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, description, tracks } = req.body;
 
     try {
-        const playlist = await Playlist.findById(id); // Find playlist by ID
+        const playlist = await Playlist.findById(id);
         if (!playlist) {
-            return res.status(404).json({ message: `Playlist with ID ${id} not found.` });
+            return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
         }
 
         if (name) playlist.name = name;
         if (description) playlist.description = description;
+        if (tracks) playlist.tracks = tracks;
 
-        await playlist.save(); // Save the updated playlist
-        res.json({ message: `Playlist with ID ${id} has been updated.`, playlist });
+        await playlist.save();
+        res.status(200).json({ success: true, message: `Playlist with ID ${id} has been updated.`, data: playlist });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
@@ -69,14 +70,15 @@ playlistsRouter.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const playlist = await Playlist.findByIdAndDelete(id); // Delete playlist by ID
+        const playlist = await Playlist.findByIdAndDelete(id);
         if (!playlist) {
-            return res.status(404).json({ message: `Playlist with ID ${id} not found.` });
+            return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
         }
-        res.json({ message: `Playlist with ID ${id} has been deleted.` });
+        res.status(200).json({ success: true, message: `Playlist with ID ${id} has been deleted.` });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
 export default playlistsRouter;
+
