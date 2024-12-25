@@ -15,9 +15,10 @@ const PORT = process.env.PORT || 4000;
 
 // Start the server only if not in test mode
 if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
+    app.listen(4000, '127.0.0.1', () => {
+        console.log('Server is running on http://127.0.0.1:4000');
     });
+    
 }
 
 
