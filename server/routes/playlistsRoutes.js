@@ -27,6 +27,17 @@ playlistsRouter.get('/:id', async (req, res) => {
     }
 });
 
+// 4. Add a debug log 
+playlistsRouter.get('/', async (req, res) => {
+    try {
+        const playlists = await Playlist.find().populate('tracks');
+        console.log('Fetched playlists:', playlists); // Debug log
+        res.status(200).json({ success: true, data: playlists });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // 3. Create a new playlist
 playlistsRouter.post('/', async (req, res) => {
     const { name, description, tracks } = req.body;
