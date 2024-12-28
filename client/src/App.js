@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Button from './components/Button'; // Import the Button component
+//import Button from './components/Button'; // Import the Button component
 import HomePage from './pages/HomePage';
 import PlaylistsPage from './pages/PlaylistsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -21,10 +21,7 @@ function App() {
                         <Route path="/tracks" element={<TrackPage />} />
                     </Routes>
                 </div>
-                <div className="action-buttons">
-                    <Button label="Explore Playlists" onClick={() => window.location.href = '/playlists'} />
-                    <Button label="My Profile" onClick={() => window.location.href = '/profile'} />
-                </div>
+               
                 <Footer />
             </div>
         </Router>
