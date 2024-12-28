@@ -1,0 +1,30 @@
+.navbar {
+    background-color: #43506c;
+    padding: 1rem;
+    display: flex;
+    justify-content: right;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+.navbar-logo {
+    position: absolute; /* Position logo independently */
+    top: 5px; /* Adjust the top space */
+    left: 2.5px; /* Adjust the left space */
+    max-width: 100px; /* Adjust logo size */
+}

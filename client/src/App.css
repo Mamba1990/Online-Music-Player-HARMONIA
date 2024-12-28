@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.main-content {
+  min-height: 70vh;
+  padding: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+.logo {
+  height: 50px;
+  object-fit: contain;
+  justify-content: left;
+}
+
+
