@@ -1,48 +1,75 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const SignupForm = ({ onSignup }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const SignupForm = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSignup({ name, email, password });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:4000/auth/signup', formData);
+            setSuccess(true);
+            console.log('Signup successful:', response.data);
+        } catch (error) {
+            console.error('Error during signup:', error.response.data);
+            setError(error.response.data.message || 'Signup failed');
+        }
+    };
+
+    if (success) return <div>Signup successful! You can now log in.</div>;
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Sign Up</h2>
-            <label>
-                Name:
+            <h1>Sign Up</h1>
+            {error && <div className="error">{error}</div>}
+            <div>
+                <label htmlFor="username">Username:</label>
                 <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
                     required
                 />
-            </label>
-            <label>
-                Email:
+            </div>
+            <div>
+                <label htmlFor="email">Email:</label>
                 <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                 />
-            </label>
-            <label>
-                Password:
+            </div>
+            <div>
+                <label htmlFor="password">Password:</label>
                 <input
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                 />
-            </label>
+            </div>
             <button type="submit">Sign Up</button>
         </form>
     );
 };
 
 export default SignupForm;
+

@@ -11,10 +11,11 @@ const Navbar = () => {
                 <span className="navbar-logo-text"></span>
             </div>
             <ul className="navbar-links">
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/playlists">Playlists</Link></li>
-                <li><Link to="/tracks">Tracks</Link></li>
-                <li><Link to="/profile">Profile</Link></li>
+            <Link to="/">Home</Link>
+            <Link to="/playlists">Playlists</Link>
+            <Link to="/tracks">Tracks</Link>
+            <Link to="/signup">Sign Up</Link>
+            <Link to="/login">Log In</Link>
             </ul>
         </nav>
     );
