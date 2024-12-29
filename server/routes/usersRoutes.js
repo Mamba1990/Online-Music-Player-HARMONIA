@@ -65,8 +65,9 @@ usersRouter.post('/', async (req, res) => {
         res.status(500).json({ error: `Failed to create user: ${error.message}` });
     }
 });
-// User registration route 
-router.post('/register', async (req, res) => {
+
+// User signup route 
+/*router.post('/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -95,7 +96,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
+*/
 // 4. Update an existing user by ID
 usersRouter.put('/:id', async (req, res) => {
     const { id } = req.params;

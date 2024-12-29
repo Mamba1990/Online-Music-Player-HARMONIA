@@ -1,36 +1,54 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const LoginForm = ({ onLogin }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const LoginForm = () => {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onLogin({ email, password });
+        try {
+            const response = await axios.post('http://localhost:4000/auth/login', formData);
+            console.log('Login successful:', response.data);
+            // Save token or redirect
+        } catch (error) {
+            console.error('Error during login:', error.response?.data || error.message);
+            setError(error.response?.data?.message || 'Login failed');
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
-            <label>
-                Email:
+        <form className="form-container" onSubmit={handleSubmit}>
+            <h1>Log In</h1>
+            {error && <div className="error">{error}</div>}
+            <div>
+                <label htmlFor="email">Email:</label>
                 <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                 />
-            </label>
-            <label>
-                Password:
+            </div>
+            <div>
+                <label htmlFor="password">Password:</label>
                 <input
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                 />
-            </label>
-            <button type="submit">Login</button>
+            </div>
+            <button type="submit">Log In</button>
         </form>
     );
 };

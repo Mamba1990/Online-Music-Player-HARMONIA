@@ -27,7 +27,7 @@ tracksRouter.get('/:id', async (req, res) => {
     }
 });
 // Fetch details for every single Track
-router.get('/:id', async (req, res) => {
+/*router.get('/:id', async (req, res) => {
     try {
         const track = await Track.findById(req.params.id);
         if (!track) return res.status(404).json({ error: 'Track not found' });
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
+*/
 
 // 3. Create a new track
 tracksRouter.post('/', async (req, res) => {

@@ -38,7 +38,7 @@ playlistsRouter.get('/', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-
+/*
 // Fetch a playlist details
 
 router.get('/:id', async (req, res) => {
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
+*/
 // 3. Create a new playlist
 playlistsRouter.post('/', async (req, res) => {
     const { name, description, tracks } = req.body;
