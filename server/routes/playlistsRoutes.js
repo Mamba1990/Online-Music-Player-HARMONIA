@@ -1,5 +1,6 @@
 import express from 'express';
 import Playlist from '../models/Playlist.js'; // Import the Playlist model
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const playlistsRouter = express.Router();
 
@@ -38,6 +39,18 @@ playlistsRouter.get('/', async (req, res) => {
     }
 });
 
+// Fetch a playlist details
+
+router.get('/:id', async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id).populate('tracks');
+        if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
+        res.json(playlist);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // 3. Create a new playlist
 playlistsRouter.post('/', async (req, res) => {
     const { name, description, tracks } = req.body;
@@ -52,6 +65,10 @@ playlistsRouter.post('/', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+playlistsRouter.post('/', authMiddleware, async (req, res) => {
+    // Logic for creating a playlist
 });
 
 // 4. Update an existing playlist by ID

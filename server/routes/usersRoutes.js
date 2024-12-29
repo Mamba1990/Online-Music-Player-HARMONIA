@@ -1,5 +1,6 @@
 import express from 'express';
 import User from '../models/User.js'; // Import the User model
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const usersRouter = express.Router();
 
@@ -38,6 +39,12 @@ usersRouter.get('/', async (req, res) => {
     }
 });
 
+// Protected route
+usersRouter.get('/profile', authMiddleware, (req, res) => {
+    res.json({ success: true, message: 'This is a protected route.', user: req.user });
+});
+
+
 // 3. Create a new user
 usersRouter.post('/', async (req, res) => {
     const { name, email, password } = req.body; // Add 'password' if required
@@ -58,6 +65,36 @@ usersRouter.post('/', async (req, res) => {
         res.status(500).json({ error: `Failed to create user: ${error.message}` });
     }
 });
+// User registration route 
+router.post('/register', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, email, password: hashedPassword });
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// User login route 
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) return res.status(401).json({ error: 'Invalid credentials' });
+
+        const token = jwt.sign({ id: user._id }, 'secret_key', { expiresIn: '1h' });
+        res.json({ token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 // 4. Update an existing user by ID
 usersRouter.put('/:id', async (req, res) => {
@@ -96,6 +133,8 @@ usersRouter.delete('/:id', async (req, res) => {
         res.status(500).json({ error: `Failed to delete user: ${error.message}` });
     }
 });
+
+
 
 export default usersRouter;
 
