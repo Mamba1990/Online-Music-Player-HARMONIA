@@ -27,6 +27,17 @@ usersRouter.get('/:id', async (req, res) => {
     }
 });
 
+// Log added to validate reponses
+usersRouter.get('/', async (req, res) => {
+    try {
+        const users = await User.find();
+        console.log('Fetched users:', users); // Debug log
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // 3. Create a new user
 usersRouter.post('/', async (req, res) => {
     const { name, email, password } = req.body; // Add 'password' if required
