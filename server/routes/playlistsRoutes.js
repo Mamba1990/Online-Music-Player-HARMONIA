@@ -1,11 +1,11 @@
 import express from 'express';
-import Playlist from '../models/Playlist.js'; // Import the Playlist model
+import Playlist from '../models/Playlist.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const playlistsRouter = express.Router();
 
 // 1. Fetch all playlists
-playlistsRouter.get('/', async (req, res) => {
+playlistsRouter.get('/', authMiddleware, async (req, res) => {
     try {
         const playlists = await Playlist.find().populate('tracks');
         res.status(200).json({ success: true, data: playlists });
@@ -15,7 +15,7 @@ playlistsRouter.get('/', async (req, res) => {
 });
 
 // 2. Fetch a specific playlist by ID
-playlistsRouter.get('/:id', async (req, res) => {
+playlistsRouter.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const playlist = await Playlist.findById(id).populate('tracks');
@@ -28,31 +28,8 @@ playlistsRouter.get('/:id', async (req, res) => {
     }
 });
 
-// 4. Add a debug log 
-playlistsRouter.get('/', async (req, res) => {
-    try {
-        const playlists = await Playlist.find().populate('tracks');
-        console.log('Fetched playlists:', playlists); // Debug log
-        res.status(200).json({ success: true, data: playlists });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-/*
-// Fetch a playlist details
-
-router.get('/:id', async (req, res) => {
-    try {
-        const playlist = await Playlist.findById(req.params.id).populate('tracks');
-        if (!playlist) return res.status(404).json({ error: 'Playlist not found' });
-        res.json(playlist);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-*/
 // 3. Create a new playlist
-playlistsRouter.post('/', async (req, res) => {
+playlistsRouter.post('/', authMiddleware, async (req, res) => {
     const { name, description, tracks } = req.body;
     if (!name) {
         return res.status(400).json({ success: false, message: 'Name is required.' });
@@ -67,12 +44,8 @@ playlistsRouter.post('/', async (req, res) => {
     }
 });
 
-playlistsRouter.post('/', authMiddleware, async (req, res) => {
-    // Logic for creating a playlist
-});
-
 // 4. Update an existing playlist by ID
-playlistsRouter.put('/:id', async (req, res) => {
+playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, description, tracks } = req.body;
 
@@ -94,7 +67,7 @@ playlistsRouter.put('/:id', async (req, res) => {
 });
 
 // 5. Delete a playlist by ID
-playlistsRouter.delete('/:id', async (req, res) => {
+playlistsRouter.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -109,4 +82,3 @@ playlistsRouter.delete('/:id', async (req, res) => {
 });
 
 export default playlistsRouter;
-

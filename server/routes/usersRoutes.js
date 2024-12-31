@@ -14,6 +14,11 @@ usersRouter.get('/', async (req, res) => {
     }
 });
 
+// Protected route for user profile
+usersRouter.get('/profile', authMiddleware, (req, res) => {
+    res.json({ success: true, message: 'This is a protected route.', user: req.user });
+});
+
 // 2. Fetch a specific user by ID
 usersRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -67,7 +72,7 @@ usersRouter.post('/', async (req, res) => {
 });
 
 // User signup route 
-/*router.post('/signup', async (req, res) => {
+usersRouter.post('/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -80,7 +85,7 @@ usersRouter.post('/', async (req, res) => {
 });
 
 // User login route 
-router.post('/login', async (req, res) => {
+usersRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -96,7 +101,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-*/
+
 // 4. Update an existing user by ID
 usersRouter.put('/:id', async (req, res) => {
     const { id } = req.params;
@@ -138,7 +143,6 @@ usersRouter.delete('/:id', async (req, res) => {
 
 
 export default usersRouter;
-
 
 
 
