@@ -1,4 +1,6 @@
 import express from 'express';
+import bcrypt from 'bcrypt'; // Import bcrypt
+import jwt from 'jsonwebtoken'; // Import jwt for token generation
 import User from '../models/User.js'; // Import the User model
 import authMiddleware from '../middleware/authMiddleware.js';
 
@@ -33,26 +35,9 @@ usersRouter.get('/:id', async (req, res) => {
     }
 });
 
-// Log added to validate reponses
-usersRouter.get('/', async (req, res) => {
-    try {
-        const users = await User.find();
-        console.log('Fetched users:', users); // Debug log
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// Protected route
-usersRouter.get('/profile', authMiddleware, (req, res) => {
-    res.json({ success: true, message: 'This is a protected route.', user: req.user });
-});
-
-
 // 3. Create a new user
 usersRouter.post('/', async (req, res) => {
-    const { name, email, password } = req.body; // Add 'password' if required
+    const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({ message: 'Name, email, and password are required.' });
     }
@@ -63,7 +48,8 @@ usersRouter.post('/', async (req, res) => {
             return res.status(400).json({ message: 'A user with this email already exists.' });
         }
 
-        const newUser = new User({ name, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+        const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save();
         res.status(201).json({ message: 'User created successfully.', user: newUser });
     } catch (error) {
@@ -71,7 +57,7 @@ usersRouter.post('/', async (req, res) => {
     }
 });
 
-// User signup route 
+// User signup route
 usersRouter.post('/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -84,7 +70,7 @@ usersRouter.post('/signup', async (req, res) => {
     }
 });
 
-// User login route 
+// User login route
 usersRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -101,7 +87,6 @@ usersRouter.post('/login', async (req, res) => {
     }
 });
 
-
 // 4. Update an existing user by ID
 usersRouter.put('/:id', async (req, res) => {
     const { id } = req.params;
@@ -116,7 +101,7 @@ usersRouter.put('/:id', async (req, res) => {
         // Update only provided fields
         if (name) user.name = name;
         if (email) user.email = email;
-        if (password) user.password = password;
+        if (password) user.password = await bcrypt.hash(password, 10);
 
         await user.save();
         res.status(200).json({ message: 'User updated successfully.', user });
@@ -140,9 +125,4 @@ usersRouter.delete('/:id', async (req, res) => {
     }
 });
 
-
-
 export default usersRouter;
-
-
-
