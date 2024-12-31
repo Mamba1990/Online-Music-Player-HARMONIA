@@ -1,10 +1,11 @@
 import express from 'express';
-import Track from '../models/Track.js'; // Import the Track model
+import Track from '../models/Track.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const tracksRouter = express.Router();
 
 // 1. Fetch all tracks
-tracksRouter.get('/', async (req, res) => {
+tracksRouter.get('/', authMiddleware, async (req, res) => {
     try {
         const tracks = await Track.find();
         res.status(200).json({ success: true, data: tracks });
@@ -14,7 +15,7 @@ tracksRouter.get('/', async (req, res) => {
 });
 
 // 2. Fetch a specific track by ID
-tracksRouter.get('/:id', async (req, res) => {
+tracksRouter.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const track = await Track.findById(id);
@@ -26,20 +27,9 @@ tracksRouter.get('/:id', async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
-// Fetch details for every single Track
-/*router.get('/:id', async (req, res) => {
-    try {
-        const track = await Track.findById(req.params.id);
-        if (!track) return res.status(404).json({ error: 'Track not found' });
-        res.json(track);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-*/
 
 // 3. Create a new track
-tracksRouter.post('/', async (req, res) => {
+tracksRouter.post('/', authMiddleware, async (req, res) => {
     const { title, artist, album, duration } = req.body;
     if (!title || !artist || !album || !duration) {
         return res.status(400).json({ success: false, message: 'Title, artist, album, and duration are required.' });
@@ -55,7 +45,7 @@ tracksRouter.post('/', async (req, res) => {
 });
 
 // 4. Update an existing track by ID
-tracksRouter.put('/:id', async (req, res) => {
+tracksRouter.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { title, artist, album, duration } = req.body;
 
@@ -78,7 +68,7 @@ tracksRouter.put('/:id', async (req, res) => {
 });
 
 // 5. Delete a track by ID
-tracksRouter.delete('/:id', async (req, res) => {
+tracksRouter.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -93,4 +83,3 @@ tracksRouter.delete('/:id', async (req, res) => {
 });
 
 export default tracksRouter;
-
