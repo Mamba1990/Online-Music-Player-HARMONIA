@@ -4,7 +4,17 @@ import authMiddleware from '../middleware/authMiddleware.js';
 
 const playlistsRouter = express.Router();
 
-// 1. Fetch all playlists
+// 1. Fetch all tracks
+playlistsRouter.get('/', async (req, res) => {
+    try {
+        const playlists = await Playlist.find();
+        res.status(200).json(playlists);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to fetch playlists: ${error.message}` });
+    }
+});
+
+/*// 1. Fetch all playlists
 playlistsRouter.get('/', authMiddleware, async (req, res) => {
     try {
         const playlists = await Playlist.find().populate('tracks');
@@ -26,7 +36,7 @@ playlistsRouter.get('/:id', authMiddleware, async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
-});
+});*/
 
 // 3. Create a new playlist
 playlistsRouter.post('/', authMiddleware, async (req, res) => {

@@ -5,9 +5,21 @@ import authMiddleware from '../middleware/authMiddleware.js';
 const tracksRouter = express.Router();
 
 // 1. Fetch all tracks
+tracksRouter.get('/', async (req, res) => {
+    try {
+        const tracks = await Track.find();
+        res.status(200).json(tracks);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to fetch tracks: ${error.message}` });
+    }
+});
+// 1. Fetch all tracks
 tracksRouter.get('/', authMiddleware, async (req, res) => {
     try {
         const tracks = await Track.find();
+        if (!tracks.length) {
+            return res.status(200).json({ success: true, data: [], message: 'No tracks available.' });
+        }
         res.status(200).json({ success: true, data: tracks });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });

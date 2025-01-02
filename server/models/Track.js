@@ -5,6 +5,7 @@ const trackSchema = new mongoose.Schema({
     artist: { type: String, required: true },
     duration: { type: Number, required: true },
     playlist: { type: mongoose.Schema.Types.ObjectId, ref: 'Playlist' },
+    filePath: { type: String, required: true}
 });
 
 const Track = mongoose.model('Track', trackSchema);

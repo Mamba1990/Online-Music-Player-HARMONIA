@@ -10,3 +10,5 @@ node_modules/
 # Ignore OS-specific files (adjust as needed)
 .DS_Store
 Thumbs.db
+# Igonre uploads folder.
+/uploads/
