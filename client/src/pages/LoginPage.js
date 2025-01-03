@@ -1,3 +1,4 @@
+// Updated LoginPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -15,13 +16,14 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(null);
         try {
             const response = await axios.post('http://localhost:4000/auth/login', formData);
             console.log('Login successful:', response.data);
             // Save token or handle redirection
         } catch (error) {
-            console.error('Error during login:', error.response.data);
-            setError(error.response.data.message || 'Login failed');
+            console.error('Error during login:', error.response?.data);
+            setError(error.response?.data?.message || 'Login failed');
         }
     };
 

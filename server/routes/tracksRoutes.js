@@ -1,6 +1,7 @@
 import express from 'express';
 import Track from '../models/Track.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import path from 'path';
 
 const tracksRouter = express.Router();
 
@@ -42,13 +43,15 @@ tracksRouter.get('/:id', authMiddleware, async (req, res) => {
 
 // 3. Create a new track
 tracksRouter.post('/', authMiddleware, async (req, res) => {
-    const { title, artist, album, duration } = req.body;
-    if (!title || !artist || !album || !duration) {
-        return res.status(400).json({ success: false, message: 'Title, artist, album, and duration are required.' });
+    const { title, artist, duration } = req.body;
+
+    if (!title || !artist || !duration) {
+        return res.status(400).json({ success: false, message: 'Title, artist, and duration are required.' });
     }
 
     try {
-        const newTrack = new Track({ title, artist, album, duration });
+        const filePath = path.join('http://localhost:4000/uploads', `${title.replace(/\s+/g, '-')}.mp3`);
+        const newTrack = new Track({ title, artist,  duration, filePath });
         await newTrack.save();
         res.status(201).json({ success: true, data: newTrack });
     } catch (error) {

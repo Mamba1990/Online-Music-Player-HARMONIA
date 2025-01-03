@@ -1,13 +1,13 @@
 🎵 **Online Music Player: Harmonia**
-Harmonia is an online music streaming platform where users can create playlists, search for songs, and enjoy music with advanced playback controls.
+Harmonia is an online music player allowing users to manage tracks and playlists, upload audio files, and play music seamlessly.
 
 ---
 
 ## 🚀 Features
-- **User Authentication**: Secure user registration, login, and logout functionality.
-- **Music Search**: Search for songs by title, artist, or genre.
-- **Music Playback Controls**: Play, pause, skip, forward, rewind, and adjust volume.
-- **Responsive Design**: Optimized for mobile, tablet, and desktop.
+- **User Authentication**: JWT-based secure authentication..
+- **Track Management**: Create, view, update, and delete tracks.
+- **Playlist Management**: Create and manage playlists with associated tracks.
+- **Frontend**: Simple React-based interface
 
 ---
 
@@ -22,7 +22,7 @@ Harmonia is an online music streaming platform where users can create playlists,
 - **Authentication**: JSON Web Tokens (JWT)
 
 ### Third-Party APIs
-- Spotify API / Last.fm API / YouTube Data API
+- Spotify API
 
 ---
 
@@ -30,7 +30,7 @@ Harmonia is an online music streaming platform where users can create playlists,
 Before running this project, ensure you have the following installed on your system:
 - **Node.js**: [Download Node.js](https://nodejs.org/)
 - **MongoDB**: Set up locally or hosted on a cloud service, [install MongoDB](https://www.mongodb.com/try/download/community)
-- **API Keys**: Obtain keys for the chosen Music API (e.g., Spotify, Last.fm).
+- **API Keys**: Obtain keys for the chosen Music API Spotify.
 - **Git**: [Install Git](https://git-scm.com/)
 
 ---
@@ -66,11 +66,10 @@ npm install
 ### Configure Environment Variables
 Create a `.env` file in the `server/` directory and add the following:
 ```env
-PORT=5000
-MONGO_URI=your-mongodb-connection-string
-API_KEY=your-music-api-key
+PORT=4000
+MONGO_URI=mongodb://127.0.0.1:27017/harmonia
+JWT_SECRET=my_super_secret_key
 ```
-Replace `your-mongodb-connection-string` and `your-music-api-key` with your actual values.
 
 ---
 
@@ -100,27 +99,36 @@ Online-Music-Player-HARMONIA/
 
 ## 📋 API Endpoints
 
-### **Users**
-- **GET** `/users`: Fetch all users.
+### **Authentication**
+- **POST** `/signup`: Register a user..
   - Example response:
     ```json
     [
-      { "id": 1, "name": "John Doe", "email": "john@example.com" }
+      { "name": "Jane Doe", "email": "jane@example.com" }
     ]
     ```
-- **POST** `/users`: Add a new user.
+- **POST** `/login`: Authenticate a user and receive a JWT.
   - Example request:
     ```json
-    { "name": "Jane Doe", "email": "jane@example.com" }
+    {"email": "jane@example.com", "password": "securedpassword"}
     ```
 
 ### **Playlists**
 - **GET** `/playlists`: Fetch all playlists.
-- **POST** `/playlists`: Create a new playlist.
+- **POST** `/playlists`: Add a new playlist (requires authentication)..
+- **GET** `/playlists/:id`: Fetch a specific playlist.
+- **PUT** `/playlists/:id`: Update a playlist (requires authentication).
+- **DELETE** `/playlists/:id`: Delete a playlist (requires authentication).
 
 ### **Tracks**
-- **GET** `/tracks`: Fetch all tracks.
-- **POST** `/tracks`: Add a new track.
+- **GET** `/tracks`: Fetch all playlists.
+- **POST** `/tracks`: Add a new playlist (requires authentication)..
+- **GET** `/tracks/:id`: Fetch a specific playlist.
+- **PUT** `/tracks/:id`: Update a playlist (requires authentication).
+- **DELETE** `/tracks/:id`: Delete a playlist (requires authentication).
+
+### **Upload**
+- **POST** `/upload`: Upload an audio file and add metadata.
 
 ---
 
@@ -136,6 +144,13 @@ npm test
 
 ## 🚀 Deployment
 This project can be deployed on platforms like Heroku, AWS, or Vercel. Deployment details will be added once finalized.
+
+---
+
+## 🚀 Future Enhancements
+- Improved Frontend styling and responsiveness.
+- Advanced playback features (shuffle, repeat, etc.).
+- Deployment to cloud platforms.
 
 ---
 

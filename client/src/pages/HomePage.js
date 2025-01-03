@@ -1,9 +1,8 @@
 import React from 'react';
-import './HomePage.css'; // Import the CSS file
 
 const HomePage = () => {
     return (
-        <div className="homepage-container">
+        <div>
             <h1>Welcome to Harmonia</h1>
             <p>Your favorite online music player!</p>
         </div>
