@@ -24,10 +24,10 @@ const SignupPage = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-
+    
         try {
-            const response = await axios.post('http://localhost:4000/auth/signup', formData);
-            if (response.data.success) {
+            const { data } = await axios.post('http://localhost:4000/auth/signup', formData);
+            if (data.success) {
                 setSuccess('Signup successful! Redirecting to login...');
                 setTimeout(() => {
                     navigate('/login');

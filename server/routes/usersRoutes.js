@@ -1,29 +1,38 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js'; // Import the User model
+import User from '../models/User.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const usersRouter = express.Router();
 
-// 1. Fetch all users
+// 3. Protected route for user profile
+// User profile endpoint
+usersRouter.get('/profile', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password'); // Exclude password
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: `Failed to fetch profile: ${error.message}` });
+    }
+});
+// fetsh all user (general routes)
 usersRouter.get('/', async (req, res) => {
     try {
         const users = await User.find();
-        console.log('Fetched users:', users); // Debug log
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Protected route for user profile
-usersRouter.get('/profile', authMiddleware, (req, res) => {
-    res.json({ success: true, message: 'This is a protected route.', user: req.user });
-});
 
-// 2. Fetch a specific user by ID
-usersRouter.get('/:id', async (req, res) => {
+
+// 2. Fetch a specific user by ID (protected route)
+usersRouter.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findById(id);
@@ -36,18 +45,11 @@ usersRouter.get('/:id', async (req, res) => {
     }
 });
 
-// Log added to validate reponses
 
 
-// Protected route
-usersRouter.get('/profile', authMiddleware, (req, res) => {
-    res.json({ success: true, message: 'This is a protected route.', user: req.user });
-});
-
-
-// 3. Create a new user
-usersRouter.post('/', async (req, res) => {
-    const { name, email, password } = req.body; // Add 'password' if required
+// 4. Create a new user (admin functionality, secured)
+usersRouter.post('/', authMiddleware, async (req, res) => {
+    const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({ message: 'Name, email, and password are required.' });
     }
@@ -58,7 +60,8 @@ usersRouter.post('/', async (req, res) => {
             return res.status(400).json({ message: 'A user with this email already exists.' });
         }
 
-        const newUser = new User({ name, email, password });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save();
         res.status(201).json({ message: 'User created successfully.', user: newUser });
     } catch (error) {
@@ -66,39 +69,8 @@ usersRouter.post('/', async (req, res) => {
     }
 });
 
-// User signup route 
-usersRouter.post('/signup', async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// User login route 
-usersRouter.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ error: 'User not found' });
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) return res.status(401).json({ error: 'Invalid credentials' });
-
-        const token = jwt.sign({ id: user._id }, 'secret_key', { expiresIn: '1h' });
-        res.json({ token });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-
-// 4. Update an existing user by ID
-usersRouter.put('/:id', async (req, res) => {
+// 7. Update an existing user by ID (protected route)
+usersRouter.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
 
@@ -111,7 +83,9 @@ usersRouter.put('/:id', async (req, res) => {
         // Update only provided fields
         if (name) user.name = name;
         if (email) user.email = email;
-        if (password) user.password = password;
+        if (password) {
+            user.password = await bcrypt.hash(password, 10);
+        }
 
         await user.save();
         res.status(200).json({ message: 'User updated successfully.', user });
@@ -120,8 +94,8 @@ usersRouter.put('/:id', async (req, res) => {
     }
 });
 
-// 5. Delete a user by ID
-usersRouter.delete('/:id', async (req, res) => {
+// 8. Delete a user by ID (protected route)
+usersRouter.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -135,9 +109,4 @@ usersRouter.delete('/:id', async (req, res) => {
     }
 });
 
-
-
 export default usersRouter;
-
-
-

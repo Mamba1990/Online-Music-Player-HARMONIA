@@ -1,38 +1,89 @@
+/*
 import React, { useEffect, useState } from 'react';
-import apiClient from '../api/axios';
+import axios from 'axios';
 
 const ProfilePage = () => {
-    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState(null);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchUser = async () => {
             try {
-                const response = await apiClient.get('/users');
-                console.log('Backend response (users):', response.data); // Log the response for debugging
-                setUsers(response.data || []); // Directly set the response data
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                setUsers([]); // Set to an empty array on error
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get('http://localhost:4000/users/profile', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (data.success) {
+                    setUser(data.user);
+                } else {
+                    setError(data.message || 'Failed to fetch user data.');
+                }
+            } catch (err) {
+                setError(err.response?.data?.message || 'An error occurred.');
             }
         };
-        fetchUsers();
+
+        fetchUser();
     }, []);
+
+    if (error) return <p>{error}</p>;
+    if (!user) return <p>Loading...</p>;
 
     return (
         <div>
-            <h1>User Profiles</h1>
-            <ul>
-                {users.length > 0 ? (
-                    users.map((user) => (
-                        <li key={user._id}>
-                            <strong>Name:</strong> {user.name} <br />
-                            <strong>Email:</strong> {user.email}
-                        </li>
-                    ))
-                ) : (
-                    <p>No users available</p>
-                )}
-            </ul>
+            <h1>Profile</h1>
+            <p>Username: {user.username}</p>
+            <p>Email: {user.email}</p>
+        </div>
+    );
+};
+
+export default ProfilePage;
+*/
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const ProfilePage = () => {
+    const [profile, setProfile] = useState(null);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+            if (!token) {
+                setError('User is not authenticated');
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:4000/users/profile', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Include the token in the request
+                    },
+                });
+                setProfile(response.data); // Update state with the user profile
+            } catch (err) {
+                setError(err.response ? err.response.data.error : 'Failed to fetch profile');
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    if (!profile) {
+        return <div>Loading...</div>;
+    }
+
+    return (
+        <div>
+            <h1>Profile Page</h1>
+            <p>Name: {profile.name}</p>
+            <p>Email: {profile.email}</p>
         </div>
     );
 };
