@@ -2,11 +2,14 @@
     background-color: #ba98eaab;
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 20px 40px;
-    font-size: 16px;
+    border-radius: 8px; /* Increased for a smoother corner look */
+    padding: 25px 50px; /* Increased for larger buttons */
+    font-size: 18px; /* Increased font size for better visibility */
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin: 0 20px; /* Adds horizontal spacing between buttons */
+    display: inline-block; /* Ensures proper alignment */
+    text-align: center;
 }
 
 .custom-button:hover {
@@ -17,3 +20,4 @@
     background-color: #bdbdbd;
     cursor: not-allowed;
 }
+

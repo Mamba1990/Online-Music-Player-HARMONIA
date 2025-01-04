@@ -1,31 +1,23 @@
+
 import express from 'express';
 import Playlist from '../models/Playlist.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const playlistsRouter = express.Router();
 
-// 1. Fetch all tracks
+// 1. Fetch all playlists
 playlistsRouter.get('/', async (req, res) => {
     try {
         const playlists = await Playlist.find();
-        res.status(200).json(playlists);
-    } catch (error) {
-        res.status(500).json({ error: `Failed to fetch playlists: ${error.message}` });
-    }
-});
-
-/*// 1. Fetch all playlists
-playlistsRouter.get('/', authMiddleware, async (req, res) => {
-    try {
-        const playlists = await Playlist.find().populate('tracks');
         res.status(200).json({ success: true, data: playlists });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching playlists:', error);
+        res.status(500).json({ success: false, message: `Failed to fetch playlists: ${error.message}` });
     }
 });
 
-// 2. Fetch a specific playlist by ID
-playlistsRouter.get('/:id', authMiddleware, async (req, res) => {
+// 2. Fetch a specific playlist by ID (no authentication required)
+playlistsRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const playlist = await Playlist.findById(id).populate('tracks');
@@ -34,9 +26,11 @@ playlistsRouter.get('/:id', authMiddleware, async (req, res) => {
         }
         res.status(200).json({ success: true, data: playlist });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching playlist by ID:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
-});*/
+});
+
 
 // 3. Create a new playlist
 playlistsRouter.post('/', authMiddleware, async (req, res) => {
@@ -50,7 +44,8 @@ playlistsRouter.post('/', authMiddleware, async (req, res) => {
         await newPlaylist.save();
         res.status(201).json({ success: true, data: newPlaylist });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error creating playlist:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
@@ -72,7 +67,8 @@ playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
         await playlist.save();
         res.status(200).json({ success: true, message: `Playlist with ID ${id} has been updated.`, data: playlist });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error updating playlist:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
@@ -87,8 +83,10 @@ playlistsRouter.delete('/:id', authMiddleware, async (req, res) => {
         }
         res.status(200).json({ success: true, message: `Playlist with ID ${id} has been deleted.` });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error deleting playlist:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
 export default playlistsRouter;
+

@@ -44,9 +44,12 @@
 
 .action-buttons {
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin: 20px 0;
+  justify-content: center; /* Horizontally center the buttons */
+  align-items: center; /* Vertically align the buttons */
+  gap: 30px; /* Adds space between buttons */
+  margin: 50px 0; /* Adjust vertical spacing on the page */
+  height: 100vh; /* Ensures buttons are centered vertically */
+  flex-direction: row; /* Buttons are displayed in a row */
 }
 .logo {
   height: 50px;
