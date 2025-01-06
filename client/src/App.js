@@ -11,11 +11,12 @@ import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
 import TrackDetailsPage from './pages/TrackDetailsPage';       
 import LoginPage from './pages/LoginPage'; 
 import SignupPage from './pages/SignupPage';
+import background from './assets/background.png'; // Import the background image
 
 function App() {
     return (
         <Router>
-            <div className="App">
+            <div className="App" style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh' }}>
                 <Navbar />
                 <div className="main-content">
                     <Routes>
