@@ -1,0 +1,19 @@
+/* App.css or HomePage.css */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    /*background-image: url('https://images.unsplash.com/photo-1544947951-c9605a9f4b7d');*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    color: white; /* This will ensure the text is readable against the dark background */
+}
+
+h1, p {
+    text-align: center;
+    padding: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Adding a shadow for better text visibility */
+}
+
