@@ -14,6 +14,6 @@ body {
 h1, p {
     text-align: center;
     padding: 20px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Adding a shadow for better text visibility */
+    text-shadow: 2px 2px 5px rgba(13, 0, 73, 0.649); /* Adding a shadow for better text visibility */
 }
 
