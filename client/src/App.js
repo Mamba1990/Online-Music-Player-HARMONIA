@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Button from './components/Button'; // Import the Button component
+/*import Button from './components/Button'; // Import the Button component */
 import HomePage from './pages/HomePage';
 import PlaylistsPage from './pages/PlaylistsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -11,6 +11,7 @@ import PlaylistDetailsPage from './pages/PlaylistDetailsPage';
 import TrackDetailsPage from './pages/TrackDetailsPage';       
 import LoginPage from './pages/LoginPage'; 
 import SignupPage from './pages/SignupPage';
+import AudioPlayerPage from './pages/AudioPlayerPage'
 import background from './assets/background.png'; // Import the background image
 
 function App() {
@@ -29,12 +30,10 @@ function App() {
                         <Route path="/tracks/:id" element={<TrackDetailsPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
+                        <Route path="/audio-player" element={<AudioPlayerPage />} />
                     </Routes>
                 </div>
-                <div className="action-buttons">
-                    <Button label="Explore Playlists" onClick={() => window.location.href = '/playlists'} />
-                    <Button label="My Profile" onClick={() => window.location.href = '/profile'} />
-                </div>
+        
                 <Footer />
             </div>
         </Router>
