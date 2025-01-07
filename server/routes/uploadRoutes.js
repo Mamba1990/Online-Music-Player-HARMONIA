@@ -1,13 +1,17 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import Track from '../models/Track.js';
 
 const uploadRouter = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        const uploadsPath = path.join(__dirname, '../uploads'); // Relative to server directory
+        cb(null, uploadsPath);
     },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}-${file.originalname}`);
@@ -18,11 +22,10 @@ const upload = multer({ storage });
 
 uploadRouter.post('/', upload.single('audio'), async (req, res) => {
     try {
-        const { title, artist, album, duration } = req.body;
+        const { title, artist, duration } = req.body;
         const newTrack = new Track({
             title,
             artist,
-            album,
             duration,
             filePath: req.file.path,
         });
