@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
 
-dotenv.config();  // Auto-load .env from the root folder
+dotenv.config();  
 
-console.log(process.env.MONGO_URI);  // It should log the MongoDB URI if the .env file is loaded properly
+console.log(process.env.MONGO_URI); 
