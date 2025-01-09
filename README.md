@@ -104,13 +104,13 @@ Online-Music-Player-HARMONIA/
   - Example response:
     ```json
     [
-      { "name": "Jane Doe", "email": "jane@example.com" }
+      { "name": "Hafsa"Daoudim, "email": "h.daoudom@outlook.com" }
     ]
     ```
 - **POST** `/login`: Authenticate a user and receive a JWT.
   - Example request:
     ```json
-    {"email": "jane@example.com", "password": "securedpassword"}
+    {"email": "h.daoudim@outlook.com", "password": "************"}
     ```
 
 ### **Playlists**
