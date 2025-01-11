@@ -100,14 +100,14 @@ Online-Music-Player-HARMONIA/
 ## 📋 API Endpoints
 
 ### **Authentication**
-- **POST** `/signup`: Register a user..
+- **POST** `/auth/signup`: Register a user..
   - Example response:
     ```json
     [
       { "name": "Hafsa Daoudim", "email": "h.daoudom@outlook.com" }
     ]
     ```
-- **POST** `/login`: Authenticate a user and receive a JWT.
+- **POST** `/auth/login`: Authenticate a user and receive a JWT.
   - Example request:
     ```json
     {"email": "h.daoudim@outlook.com", "password": "************"}
