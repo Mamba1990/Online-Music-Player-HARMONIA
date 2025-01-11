@@ -104,7 +104,7 @@ Online-Music-Player-HARMONIA/
   - Example response:
     ```json
     [
-      { "name": "Hafsa"Daoudim, "email": "h.daoudom@outlook.com" }
+      { "name": "Hafsa Daoudim", "email": "h.daoudom@outlook.com" }
     ]
     ```
 - **POST** `/login`: Authenticate a user and receive a JWT.
@@ -121,14 +121,14 @@ Online-Music-Player-HARMONIA/
 - **DELETE** `/playlists/:id`: Delete a playlist (requires authentication).
 
 ### **Tracks**
-- **GET** `/tracks`: Fetch all playlists.
-- **POST** `/tracks`: Add a new playlist (requires authentication)..
-- **GET** `/tracks/:id`: Fetch a specific playlist.
-- **PUT** `/tracks/:id`: Update a playlist (requires authentication).
-- **DELETE** `/tracks/:id`: Delete a playlist (requires authentication).
+- **GET** `/tracks`: Fetch all trackss.
+- **POST** `/tracks`: Add a new track (requires authentication)..
+- **GET** `/tracks/:id`: Fetch a specific track.
+- **PUT** `/tracks/:id`: Update a track (requires authentication).
+- **DELETE** `/tracks/:id`: Delete a track (requires authentication).
 
 ### **Upload**
-- **POST** `/upload`: Upload an audio file and add metadata.
+- **POST** `/upload`: Upload an audio file and add metadata ((requires authentication).
 
 ---
 
