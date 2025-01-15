@@ -75,15 +75,24 @@ JWT_SECRET=my_super_secret_key
 
 ## 📂 Project Structure
 ```
-Online-Music-Player-HARMONIA/
 ├── client/               # Frontend (React app)
 │   ├── public/           # Static assets
 │   └── src/              # React components, pages, and styles
 ├── server/               # Backend (Node.js + Express)
 │   ├── models/           # Database schemas
+│   │   ├── Playlist.js   # Playlist schema
+│   │   ├── Track.js      # Track schema
+│   │   └── User.js       # User schema
 │   ├── routes/           # API endpoints
+│   │   ├── auth.js       # Authentication routes
+│   │   ├── playlistsRoutes.js # Playlist routes
+│   │   ├── tracksRoutes.js    # Track routes
+│   │   └── usersRoutes.js     # User routes
 │   ├── controllers/      # Request handlers
+│   ├── middleware/       # Middleware functions
+│   │   └── authMiddleware.js # Authentication middleware
 │   ├── utils/            # Helper functions
+│   ├── uploads/          # Uploaded audio files
 │   ├── db.js             # Database connection
 │   └── server.js         # Entry point
 ├── tests/                # Test files
@@ -99,36 +108,34 @@ Online-Music-Player-HARMONIA/
 
 ## 📋 API Endpoints
 
-### **Authentication**
-- **POST** `/auth/signup`: Register a user..
-  - Example response:
+### Authentication
+- **POST /auth/signup**: Register a user.
+  - **Example response:**
     ```json
-    [
-      { "name": "Hafsa Daoudim", "email": "h.daoudom@outlook.com" }
-    ]
+    { "name": "Hafsa Daoudim", "email": "h.daoudom@outlook.com" }
     ```
-- **POST** `/auth/login`: Authenticate a user and receive a JWT.
-  - Example request:
+- **POST /auth/login**: Authenticate a user and receive a JWT.
+  - **Example request:**
     ```json
     {"email": "h.daoudim@outlook.com", "password": "************"}
     ```
 
-### **Playlists**
-- **GET** `/playlists`: Fetch all playlists.
-- **POST** `/playlists`: Add a new playlist (requires authentication)..
-- **GET** `/playlists/:id`: Fetch a specific playlist.
-- **PUT** `/playlists/:id`: Update a playlist (requires authentication).
-- **DELETE** `/playlists/:id`: Delete a playlist (requires authentication).
+### Playlists
+- **GET /playlists**: Fetch all playlists (accessible to all authenticated users).
+- **POST /playlists**: Add a new playlist (requires authentication).
+- **GET /playlists/:id**: Fetch a specific playlist (accessible to all authenticated users).
+- **PUT /playlists/:id**: Update a playlist (requires admin role or playlist owner authentication).
+- **DELETE /playlists/:id**: Delete a playlist (requires admin role or owner authentication).
 
-### **Tracks**
-- **GET** `/tracks`: Fetch all trackss.
-- **POST** `/tracks`: Add a new track (requires authentication)..
-- **GET** `/tracks/:id`: Fetch a specific track.
-- **PUT** `/tracks/:id`: Update a track (requires authentication).
-- **DELETE** `/tracks/:id`: Delete a track (requires authentication).
+### Tracks
+- **GET /tracks**: Fetch all tracks (accessible to all authenticated users).
+- **POST /tracks**: Add a new track (requires admin role).
+- **GET /tracks/:id**: Fetch a specific track (accessible to all authenticated users).
+- **PUT /tracks/:id**: Update a track (requires admin role).
+- **DELETE /tracks/:id**: Delete a track (requires admin role).
 
-### **Upload**
-- **POST** `/upload`: Upload an audio file and add metadata ((requires authentication).
+### Upload
+- **POST /upload**: Upload an audio file and add metadata (requires admin role).
 
 ---
 
