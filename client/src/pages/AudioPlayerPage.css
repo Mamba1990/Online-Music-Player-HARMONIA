@@ -1,4 +1,4 @@
-/* AudioPlayerPage.css */
+/* AudioPlayerPage.css 
 div {
     text-align: center;
     margin-top: 200px;
@@ -10,4 +10,24 @@ audio {
     margin-top: 20px;
     width: 80%;
 
+}*/
+/* AudioPlayerPage.css */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0; /* Optional background for better contrast */
+    font-family: Arial, sans-serif;
+}
+
+div {
+    text-align: center;
+    color: blue;
+}
+
+audio {
+    margin-top: 20px;
+    width: 80%;
 }

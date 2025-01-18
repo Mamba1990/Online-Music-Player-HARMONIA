@@ -11,7 +11,7 @@ const TrackPage = () => {
         const fetchTracks = async () => {
             try {
                 const response = await axios.get('http://localhost:4000/tracks', {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include token
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Including token
                 });
                 setTracks(response.data?.data || []); // Ensure default empty array if undefined
             } catch (error) {

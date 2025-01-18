@@ -8,12 +8,12 @@
 }
 
 form h1 {
-    text-align: center;
+    text-align: left;
     margin-bottom: 20px;
 }
 
 form div {
-    margin-bottom: 15px;
+    margin-bottom: 50px;
 }
 
 form label {
@@ -22,13 +22,13 @@ form label {
 }
 
 form input {
-    width: 100%;
+    width: 40%;
     padding: 8px;
     box-sizing: border-box;
 }
 
 form button {
-    width: 100%;
+    width: 40%;
     padding: 10px;
     background-color: #007bff;
     color: white;
