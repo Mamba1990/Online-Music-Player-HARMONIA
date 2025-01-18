@@ -1,19 +1,30 @@
-/* App.css or HomePage.css */
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    /*background-image: url('https://images.unsplash.com/photo-1544947951-c9605a9f4b7d');*/
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    color: white; /* This will ensure the text is readable against the dark background */
-}
-
-h1, p {
+.homepage-container {
     text-align: center;
+    margin: 50px auto;
     padding: 20px;
-    text-shadow: 2px 2px 5px rgba(13, 0, 73, 0.649); /* Adding a shadow for better text visibility */
+    color: White;
+    font-family: Arial, sans-serif;
 }
 
+.homepage-container h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+
+.homepage-container p {
+    font-size: 2.0rem;
+    line-height: 1.5;
+    font-style: italic;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.homepage-introduction p {
+    margin-top: 40px;
+    font-style: italic;
+    color: rgb(38, 8, 97);
+    font-size: 1.4rem;
+    text-align: center;
+
+}

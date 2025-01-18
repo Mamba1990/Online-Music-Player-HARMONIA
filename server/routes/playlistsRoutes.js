@@ -1,11 +1,11 @@
-
 import express from 'express';
 import Playlist from '../models/Playlist.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import adminMiddleware from '../middleware/adminMiddleware.js';
 
 const playlistsRouter = express.Router();
 
-// 1. Fetch all playlists
+// 1. Fetching  all playlists (public)
 playlistsRouter.get('/', async (req, res) => {
     try {
         const playlists = await Playlist.find();
@@ -16,7 +16,7 @@ playlistsRouter.get('/', async (req, res) => {
     }
 });
 
-// 2. Fetch a specific playlist by ID (no authentication required)
+// 2. Fetch a specific playlist by ID
 playlistsRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -31,16 +31,21 @@ playlistsRouter.get('/:id', async (req, res) => {
     }
 });
 
-
-// 3. Create a new playlist
+// 3. Creating a new playlist (only authenticated users)
 playlistsRouter.post('/', authMiddleware, async (req, res) => {
     const { name, description, tracks } = req.body;
+
     if (!name) {
         return res.status(400).json({ success: false, message: 'Name is required.' });
     }
 
     try {
-        const newPlaylist = new Playlist({ name, description, tracks });
+        const newPlaylist = new Playlist({
+            name,
+            description,
+            tracks,
+            createdBy: req.user.id, // Linking the playlist to the creator
+        });
         await newPlaylist.save();
         res.status(201).json({ success: true, data: newPlaylist });
     } catch (error) {
@@ -49,7 +54,8 @@ playlistsRouter.post('/', authMiddleware, async (req, res) => {
     }
 });
 
-// 4. Update an existing playlist by ID
+// 4. Updating an existing playlist by ID
+
 playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, description, tracks } = req.body;
@@ -58,6 +64,10 @@ playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
         const playlist = await Playlist.findById(id);
         if (!playlist) {
             return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
+        }
+
+        if (req.user.role !== 'admin' && (!playlist.userId || playlist.userId.toString() !== req.user.id.toString())) {
+            return res.status(403).json({ success: false, message: 'You do not have permission to update this playlist.' });
         }
 
         if (name) playlist.name = name;
@@ -72,15 +82,48 @@ playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// 5. Delete a playlist by ID
+/*playlistsRouter.put('/:id', authMiddleware, async (req, res) => {
+    const { id } = req.params;
+    const { name, description, tracks } = req.body;
+
+    try {
+        const playlist = await Playlist.findById(id);
+        if (!playlist) {
+            return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
+        }
+
+        // Ensure the user is the owner or an admin
+        if (playlist.createdBy.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Access denied. Not authorized to update this playlist.' });
+        }
+
+        if (name) playlist.name = name;
+        if (description) playlist.description = description;
+        if (tracks) playlist.tracks = tracks;
+
+        await playlist.save();
+        res.status(200).json({ success: true, message: `Playlist with ID ${id} has been updated.`, data: playlist });
+    } catch (error) {
+        console.error('Error updating playlist:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+*/
+// 5. Deleting a playlist by ID
 playlistsRouter.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {
-        const playlist = await Playlist.findByIdAndDelete(id);
+        const playlist = await Playlist.findById(id);
         if (!playlist) {
             return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
         }
+
+        if (req.user.role !== 'admin' && (!playlist.userId || playlist.userId.toString() !== req.user.id.toString())) {
+            return res.status(403).json({ success: false, message: 'You do not have permission to delete this playlist.' });
+        }
+
+        await Playlist.findByIdAndDelete(id);
         res.status(200).json({ success: true, message: `Playlist with ID ${id} has been deleted.` });
     } catch (error) {
         console.error('Error deleting playlist:', error);
@@ -90,3 +133,28 @@ playlistsRouter.delete('/:id', authMiddleware, async (req, res) => {
 
 export default playlistsRouter;
 
+
+/*playlistsRouter.delete('/:id', authMiddleware, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const playlist = await Playlist.findById(id);
+        if (!playlist) {
+            return res.status(404).json({ success: false, message: `Playlist with ID ${id} not found.` });
+        }
+
+        // Ensure the user is the owner or an admin
+        if (playlist.createdBy.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Access denied. Not authorized to delete this playlist.' });
+        }
+
+        await playlist.deleteOne();
+        res.status(200).json({ success: true, message: `Playlist with ID ${id} has been deleted.` });
+    } catch (error) {
+        console.error('Error deleting playlist:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+export default playlistsRouter;
+*/

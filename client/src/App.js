@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import LoginForm from './components/forms/LoginForm';
+import SignupForm from './components/forms/SignupForm';
 /*import Button from './components/Button'; // Import the Button component */
 import HomePage from './pages/HomePage';
 import PlaylistsPage from './pages/PlaylistsPage';
@@ -30,6 +32,8 @@ function App() {
                         <Route path="/tracks/:id" element={<TrackDetailsPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignupPage />} />
+	    		<Route path="/login" element={<LoginForm />} />
+                	<Route path="/signup" element={<SignupForm />} />
                         <Route path="/audio-player" element={<AudioPlayerPage />} />
                     </Routes>
                 </div>

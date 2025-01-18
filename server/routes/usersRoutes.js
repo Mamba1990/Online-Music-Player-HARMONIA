@@ -17,6 +17,7 @@ usersRouter.get('/profile', authMiddleware, async (req, res) => {
         res.status(500).json({ error: `Failed to fetch profile: ${error.message}` });
     }
 });
+
 // 1. Get all users (Public)
 usersRouter.get('/', async (req, res) => {
     try {
@@ -41,12 +42,15 @@ usersRouter.get('/:id', async (req, res) => {
     }
 });
 
-
-
-// 4. Update user by ID (Protected)
+// 4. Update user by ID (Protected - Only the authenticated user can update their account)
 usersRouter.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
+
+    // Check if the authenticated user is the owner of the account
+    if (req.user.id !== id) {
+        return res.status(403).json({ success: false, message: 'Access denied. You can only update your own account.' });
+    }
 
     try {
         const user = await User.findById(id);
@@ -66,9 +70,50 @@ usersRouter.put('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// 5. Delete user by ID (Protected)
+// 5. Delete user by ID (Protected - Only the authenticated user can delete their account)
+// 5. Delete user by ID (Protected - Admin can delete any user, regular users can delete only their account)
 usersRouter.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
+
+    try {
+        // Check if the authenticated user is allowed to delete this account
+        if (req.user.role !== 'admin' && req.user.id !== id) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Access denied. You can only delete your own account.' 
+            });
+        }
+
+        // Attempt to delete the user
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).json({ 
+                success: false, 
+                message: `User with ID ${id} not found.` 
+            });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'User deleted successfully.', 
+            user 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: `Failed to delete user: ${error.message}` 
+        });
+    }
+});
+
+/*usersRouter.delete('/:id', authMiddleware, async (req, res) => {
+    const { id } = req.params;
+
+    // Check if the authenticated user is the owner of the account
+    if (req.user.id !== id) {
+        return res.status(403).json({ success: false, message: 'Access denied. You can only delete your own account.' });
+    }
+
     try {
         const user = await User.findByIdAndDelete(id);
         if (!user) {
@@ -79,5 +124,6 @@ usersRouter.delete('/:id', authMiddleware, async (req, res) => {
         res.status(500).json({ success: false, error: `Failed to delete user: ${error.message}` });
     }
 });
-
+*/
 export default usersRouter;
+

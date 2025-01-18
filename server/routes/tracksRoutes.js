@@ -1,6 +1,7 @@
 import express from 'express';
 import Track from '../models/Track.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import adminMiddleware from '../middleware/adminMiddleware.js';
 import path from 'path';
 
 const tracksRouter = express.Router();
@@ -9,9 +10,9 @@ const tracksRouter = express.Router();
 tracksRouter.get('/', async (req, res) => {
     try {
         const tracks = await Track.find();
-        res.status(200).json(tracks);
+        res.status(200).json({ success: true, data: tracks });
     } catch (error) {
-        res.status(500).json({ error: `Failed to fetch tracks: ${error.message}` });
+        res.status(500).json({ success: false, message: `Failed to fetch tracks: ${error.message}` });
     }
 });
 
@@ -25,12 +26,12 @@ tracksRouter.get('/:id', async (req, res) => {
         }
         res.status(200).json({ success: true, data: track });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 3. Create a new track (authentication required)
-tracksRouter.post('/', authMiddleware, async (req, res) => {
+// 3. Create a new track (admin only)
+tracksRouter.post('/', authMiddleware, adminMiddleware, async (req, res) => {
     const { title, artist, duration } = req.body;
 
     if (!title || !artist || !duration) {
@@ -43,14 +44,14 @@ tracksRouter.post('/', authMiddleware, async (req, res) => {
         await newTrack.save();
         res.status(201).json({ success: true, data: newTrack });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 4. Update an existing track by ID (authentication required)
-tracksRouter.put('/:id', authMiddleware, async (req, res) => {
+// 4. Update an existing track by ID (admin only)
+tracksRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params;
-    const { title, artist,  duration } = req.body;
+    const { title, artist, duration } = req.body;
 
     try {
         const track = await Track.findById(id);
@@ -60,18 +61,17 @@ tracksRouter.put('/:id', authMiddleware, async (req, res) => {
 
         if (title) track.title = title;
         if (artist) track.artist = artist;
-    
         if (duration) track.duration = duration;
 
         await track.save();
         res.status(200).json({ success: true, message: `Track with ID ${id} has been updated.`, data: track });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 5. Delete a track by ID (authentication required)
-tracksRouter.delete('/:id', authMiddleware, async (req, res) => {
+// 5. Delete a track by ID (admin only)
+tracksRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -81,8 +81,9 @@ tracksRouter.delete('/:id', authMiddleware, async (req, res) => {
         }
         res.status(200).json({ success: true, message: `Track with ID ${id} has been deleted.` });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
 export default tracksRouter;
+
