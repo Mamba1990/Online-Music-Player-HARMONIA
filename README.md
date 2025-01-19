@@ -123,16 +123,16 @@ JWT_SECRET=my_super_secret_key
     ```
 
 ### Playlists
-- **GET /playlists**: Fetch all playlists (accessible to all authenticated users).
+- **GET /playlists**: Fetch all playlists (public).
 - **POST /playlists**: Add a new playlist (requires authentication).
-- **GET /playlists/:id**: Fetch a specific playlist (accessible to all authenticated users).
+- **GET /playlists/:id**: Fetch a specific playlist (public).
 - **PUT /playlists/:id**: Update a playlist (requires admin role or playlist owner authentication).
 - **DELETE /playlists/:id**: Delete a playlist (requires admin role or owner authentication).
 
 ### Tracks
-- **GET /tracks**: Fetch all tracks (accessible to all authenticated users).
+- **GET /tracks**: Fetch all tracks (public).
 - **POST /tracks**: Add a new track (requires admin role).
-- **GET /tracks/:id**: Fetch a specific track (accessible to all authenticated users).
+- **GET /tracks/:id**: Fetch a specific track (public).
 - **PUT /tracks/:id**: Update a track (requires admin role).
 - **DELETE /tracks/:id**: Delete a track (requires admin role).
 
@@ -152,14 +152,13 @@ npm test
 ---
 
 ## 🚀 Deployment
-This project can be deployed on platforms like Heroku, AWS, or Vercel. Deployment details will be added once finalized.
+This project can be deployed on platforms like Heroku, AWS. Deployment details will be added once finalized.
 
 ---
 
 ## 🚀 Future Enhancements
 - Improved Frontend styling and responsiveness.
 - Advanced playback features (shuffle, repeat, etc.).
-- Deployment to cloud platforms.
 
 ---
 
