@@ -5,28 +5,28 @@ import User from '../models/User.js';
 
 const authRouter = express.Router();
 
-// 1. Signup
+// 1- Signup
 authRouter.post('/signup', async (req, res) => {
-    const { name, email, password, role } = req.body; // Allow role to be passed for flexibility during setup.
+    const { name, email, password, role } = req.body; // Allowing role to be passed for flexibility during setup.
 
     if (!name || !email || !password) {
         return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
     }
 
     try {
-        // Check if the user already exists
+        // Checking if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ success: false, message: 'User with this email already exists.' });
         }
 
-        // Hash the password
+        // Hashing the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Assign a default role if not provided
+        // Assigning a default role if not provided
         const userRole = role || 'user';
 
-        // Create the new user
+        // Creating the new user
         const newUser = new User({ name, email, password: hashedPassword, role: userRole });
         await newUser.save();
 
@@ -36,7 +36,7 @@ authRouter.post('/signup', async (req, res) => {
     }
 });
 
-// 2. Login
+// 2- Login
 authRouter.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -47,19 +47,19 @@ authRouter.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email });
 
-        // Ensure timing attack resistance by comparing passwords regardless of user existence
+        // Ensuring timing attack resistance by comparing passwords regardless of user existence
         const isPasswordValid = user ? await bcrypt.compare(password, user.password) : false;
 
         if (!user || !isPasswordValid) {
             return res.status(401).json({ success: false, message: 'Invalid credentials.' });
         }
 
-        // Ensure the user has a valid role (optional)
+        // Ensuring the user has a valid role
         if (!user.role) {
             return res.status(403).json({ success: false, message: 'User does not have a valid role assigned.' });
         }
 
-        // Sign a JWT with user ID, role, audience, and issuer
+        // Signing a JWT with user ID, role, audience, and issuer
         const jwtSecret = process.env.JWT_SECRET;
         if (!jwtSecret) {
             throw new Error('JWT_SECRET is not defined in the environment variables.');

@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const TrackDetailsPage = () => {
-    const { id } = useParams(); // Get the track ID from the URL
-    const [track, setTrack] = useState(null); // State to store track details
-    const [error, setError] = useState(null); // State to handle errors
+    const { id } = useParams(); // Getting the track ID from the URL
+    const [track, setTrack] = useState(null); // Stating to store track details
+    const [error, setError] = useState(null); // Stating to handle errors
 
     useEffect(() => {
         const fetchTrack = async () => {

@@ -22,7 +22,7 @@ Harmonia is an online music player allowing users to manage tracks and playlists
 - **Authentication**: JSON Web Tokens (JWT)
 
 ### Third-Party APIs
-- Spotify API
+- Spotify API (Future Enhancement, not implemented yet)
 
 ---
 
@@ -74,6 +74,7 @@ JWT_SECRET=my_super_secret_key
 ---
 
 ## 📂 Project Structure
+
 ```
 ├── client/               # Frontend (React app)
 │   ├── public/           # Static assets
@@ -88,10 +89,10 @@ JWT_SECRET=my_super_secret_key
 │   │   ├── playlistsRoutes.js # Playlist routes
 │   │   ├── tracksRoutes.js    # Track routes
 │   │   └── usersRoutes.js     # User routes
-│   ├── controllers/      # Request handlers
+│   ├──
 │   ├── middleware/       # Middleware functions
 │   │   └── authMiddleware.js # Authentication middleware
-│   ├── utils/            # Helper functions
+|   |
 │   ├── uploads/          # Uploaded audio files
 │   ├── db.js             # Database connection
 │   └── server.js         # Entry point
@@ -102,6 +103,7 @@ JWT_SECRET=my_super_secret_key
 ├── .env                  # Environment variables
 ├── package.json          # Project dependencies
 └── README.md             # Project documentation
+
 ```
 
 ---

@@ -23,8 +23,8 @@
     text-decoration: underline;
 }
 .navbar-logo {
-    position: absolute; /* Position logo independently */
-    top: 5px; /* Adjust the top space */
-    left: 2.5px; /* Adjust the left space */
-    max-width: 100px; /* Adjust logo size */
+    position: absolute;
+    top: 5px; 
+    left: 2.5px; 
+    max-width: 100px; 
 }

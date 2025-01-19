@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Allow only admins to upload tracks
+// Allowing only admins to upload tracks
 uploadRouter.post('/', authMiddleware, adminMiddleware, upload.single('audio'), async (req, res) => {
     try {
         const { title, artist, duration } = req.body;
@@ -36,7 +36,7 @@ uploadRouter.post('/', authMiddleware, adminMiddleware, upload.single('audio'), 
             artist,
             duration,
             filePath: req.file.path,
-            uploadedBy: req.user.id, // Track admin uploader
+            uploadedBy: req.user.id, // Track admin uploader.
         });
 
         await newTrack.save();
@@ -49,4 +49,3 @@ uploadRouter.post('/', authMiddleware, adminMiddleware, upload.single('audio'), 
 });
 
 export default uploadRouter;
-

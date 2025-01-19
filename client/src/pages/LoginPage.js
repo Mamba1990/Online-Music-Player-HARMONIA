@@ -1,4 +1,4 @@
-// Updated LoginPage.js
+//  LoginPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -20,7 +20,6 @@ const LoginPage = () => {
         try {
             const response = await axios.post('http://localhost:4000/auth/login', formData);
             console.log('Login successful:', response.data);
-            // Save token or handle redirection
         } catch (error) {
             console.error('Error during login:', error.response?.data);
             setError(error.response?.data?.message || 'Login failed');

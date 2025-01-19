@@ -7,7 +7,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+            const token = localStorage.getItem('token'); // Retrieving the token from localStorage
             if (!token) {
                 setError('User is not authenticated. Please log in.');
                 return;
@@ -16,12 +16,12 @@ const ProfilePage = () => {
             try {
                 const { data } = await axios.get('http://localhost:4000/users/profile', {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Include the token in the request
+                        Authorization: `Bearer ${token}`, // Including the token in the request
                     },
                 });
 
                 if (data.success) {
-                    setProfile(data.user); // Update state with the user data
+                    setProfile(data.user); // Updating state with the user data
                 } else {
                     setError(data.message || 'Failed to fetch user data.');
                 }
