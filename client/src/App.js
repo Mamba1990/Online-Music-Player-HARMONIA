@@ -4,7 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoginForm from './components/forms/LoginForm';
 import SignupForm from './components/forms/SignupForm';
-/*import Button from './components/Button'; // Import the Button component */
+/*import Button from './components/Button'; // Importing the Button component - to be implemented later */
 import HomePage from './pages/HomePage';
 import PlaylistsPage from './pages/PlaylistsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -14,7 +14,7 @@ import TrackDetailsPage from './pages/TrackDetailsPage';
 import LoginPage from './pages/LoginPage'; 
 import SignupPage from './pages/SignupPage';
 import AudioPlayerPage from './pages/AudioPlayerPage'
-import background from './assets/background.png'; // Import the background image
+import background from './assets/background.png'; 
 
 function App() {
     return (
@@ -27,7 +27,6 @@ function App() {
                         <Route path="/playlists" element={<PlaylistsPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route path="/tracks" element={<TrackPage />} />
-                        {/* New Routes for Playlist and Track Details */}
                         <Route path="/playlists/:id" element={<PlaylistDetailsPage />} />
                         <Route path="/tracks/:id" element={<TrackDetailsPage />} />
                         <Route path="/login" element={<LoginPage />} />

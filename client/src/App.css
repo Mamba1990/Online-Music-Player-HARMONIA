@@ -1,10 +1,10 @@
 .App {
   text-align: center;
-  min-height: 100vh; /* Ensures the background covers the viewport */
-  background-image: url('./assets/background.png'); /* Path to your image */
-  background-size: cover; /* Ensures the image covers the entire background */
-  background-position: center; /* Centers the image */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+  min-height: 100vh; 
+  background-image: url('./assets/background.png'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;
 }
 
 
@@ -50,12 +50,12 @@
 
 .action-buttons {
   display: flex;
-  justify-content: center; /* Horizontally center the buttons */
-  align-items: center; /* Vertically align the buttons */
-  gap: 30px; /* Adds space between buttons */
-  margin: 50px 0; /* Adjust vertical spacing on the page */
-  height: 100vh; /* Ensures buttons are centered vertically */
-  flex-direction: row; /* Buttons are displayed in a row */
+  justify-content: center; 
+  align-items: center; 
+  gap: 30px; 
+  margin: 50px 0;
+  height: 100vh; 
+  flex-direction: row;
 }
 .logo {
   height: 50px;

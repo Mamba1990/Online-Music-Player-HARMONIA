@@ -6,7 +6,7 @@ import path from 'path';
 
 const tracksRouter = express.Router();
 
-// 1. Fetch all tracks
+// 1- Fetching all tracks
 tracksRouter.get('/', async (req, res) => {
     try {
         const tracks = await Track.find();
@@ -16,7 +16,7 @@ tracksRouter.get('/', async (req, res) => {
     }
 });
 
-// 2. Fetch a specific track by ID (no authentication required)
+// 2- Fetching a specific track by ID (no authentication required)
 tracksRouter.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -30,7 +30,7 @@ tracksRouter.get('/:id', async (req, res) => {
     }
 });
 
-// 3. Create a new track (admin only)
+// 3- Creating a new track (admin only)
 tracksRouter.post('/', authMiddleware, adminMiddleware, async (req, res) => {
     const { title, artist, duration } = req.body;
 
@@ -48,7 +48,7 @@ tracksRouter.post('/', authMiddleware, adminMiddleware, async (req, res) => {
     }
 });
 
-// 4. Update an existing track by ID (admin only)
+// 4- Updating an existing track by ID (admin only)
 tracksRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params;
     const { title, artist, duration } = req.body;
@@ -70,7 +70,7 @@ tracksRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     }
 });
 
-// 5. Delete a track by ID (admin only)
+// 5- Deleting a track by ID (admin only)
 tracksRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const { id } = req.params;
 
@@ -86,4 +86,3 @@ tracksRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) =>
 });
 
 export default tracksRouter;
-

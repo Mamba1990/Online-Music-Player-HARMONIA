@@ -16,7 +16,7 @@ const LoginForm = () => {
         try {
             const response = await axios.post('http://localhost:4000/auth/login', formData);
             console.log('Login successful:', response.data);
-            // Save token or redirect
+            // Saving token or redirect
         } catch (error) {
             console.error('Error during login:', error.response?.data || error.message);
             setError(error.response?.data?.message || 'Login failed');
