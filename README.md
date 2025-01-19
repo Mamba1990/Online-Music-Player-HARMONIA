@@ -89,12 +89,12 @@ JWT_SECRET=my_super_secret_key
 │   │   ├── playlistsRoutes.js # Playlist routes
 │   │   ├── tracksRoutes.js    # Track routes
 │   │   └── usersRoutes.js     # User routes
-│   ├──
 │   ├── middleware/       # Middleware functions
-│   │   └── authMiddleware.js # Authentication middleware
-|   |
+│   │   ├── authMiddleware.js # Authentication middleware
+│   │   └── adminMiddleware.js # Admin middleware
 │   ├── uploads/          # Uploaded audio files
 │   ├── db.js             # Database connection
+│   ├── app.js            # Express application setup
 │   └── server.js         # Entry point
 ├── tests/                # Test files
 │   ├── playlists.test.js # Playlist route tests
