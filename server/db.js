@@ -1,7 +1,13 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-dotenv.config();
+//dotenv.config();
+// Get root directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 console.log('MONGO_URI:', process.env.MONGO_URI); // Debugging line
 

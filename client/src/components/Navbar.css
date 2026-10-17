@@ -1,30 +1,69 @@
 .navbar {
-    background-color: #43506c;
-    padding: 1rem;
-    display: flex;
-    justify-content: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 32px;
+  background-color: rgba(13, 11, 46, 0.78);
+  border-bottom: 1px solid rgba(127, 140, 255, 0.25);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo-image {
+  height: 48px;
+  width: 48px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 2rem;
-    padding: 0;
-    margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar-links a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2rem;
+.navbar-links a,
+.navbar-logout {
+  color: #fff;
+  font: inherit;
+  font-size: 1.05rem;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 4px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
 }
 
-.navbar-links a:hover {
-    text-decoration: underline;
+.navbar-links a:hover,
+.navbar-logout:hover {
+  color: #5b8cff;
+  border-bottom-color: #5b8cff;
 }
-.navbar-logo {
-    position: absolute;
-    top: 5px; 
-    left: 2.5px; 
-    max-width: 100px; 
+
+.navbar-links a:focus-visible,
+.navbar-logout:focus-visible {
+  outline: 2px solid #5b8cff;
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 16px;
+  }
+
+  .navbar-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
 }

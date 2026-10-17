@@ -1,21 +1,9 @@
-/* AudioPlayerPage.css */
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
-
-div {
-    text-align: center;
-    color: blue;
-}
-
-audio {
-    margin-top: 20px;
-    width: 80%;
+.audio-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  text-align: center;
+  color: #fff;
 }
