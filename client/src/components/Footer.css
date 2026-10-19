@@ -1,10 +1,21 @@
 .footer {
-    background-color: #9ba9ac72;
-    color: rgb(38, 8, 97);
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: 14px;
+  padding: 14px 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #b9c0ee;
+  background-color: rgba(13, 11, 46, 0.78);
+  border-top: 1px solid rgba(127, 140, 255, 0.25);
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer-brand {
+  font-weight: 600;
+  background: linear-gradient(90deg, #5b8cff, #a24dff 60%, #ff5fa8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
