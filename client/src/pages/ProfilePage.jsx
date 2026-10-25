@@ -14,7 +14,7 @@ const ProfilePage = () => {
 
       try {
         const { data } = await apiClient.get('/users/profile')
-        setProfile(data.user ?? data)
+        setProfile(data.user)
       } catch (err) {
         setError(
           err.response?.data?.message || 'An unexpected error occurred. Please try again.'
