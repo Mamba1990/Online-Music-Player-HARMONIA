@@ -25,3 +25,6 @@ Thumbs.db
 # Uploads (fichiers audio des utilisateurs)
 /server/uploads/*
 !/server/uploads/.gitkeep
+.env
+**/.env
+!.env.example
