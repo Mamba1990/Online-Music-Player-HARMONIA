@@ -2,7 +2,7 @@ pages:
   stage: deploy
   image: node:22-alpine
   script:
-    - export VITE_BASE="/$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')/"
+    - export VITE_BASE="/"
     - cd client
     - npm ci
     - npm run build
