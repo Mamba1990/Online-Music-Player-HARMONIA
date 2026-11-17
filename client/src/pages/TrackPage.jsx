@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import apiClient from '../api/axios'
 import PlayButton from '../components/PlayButton'
+import PlaylistMenu from '../components/PlaylistMenu'
 import { usePlayer } from '../context/PlayerContext'
 import { formatDuration } from '../utils/format'
 import './TrackPage.css'
@@ -31,6 +32,7 @@ const TrackPage = () => {
     fetchTracks()
   }, [fetchTracks])
 
+  // Recherche par titre ou artiste
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     if (!q) return tracks
@@ -39,6 +41,7 @@ const TrackPage = () => {
     )
   }, [tracks, query])
 
+  // Seules les pistes avec un fichier audio peuvent entrer dans la file de lecture
   const playable = useMemo(() => visible.filter((t) => t.filePath), [visible])
 
   const playAll = () => {
@@ -99,6 +102,9 @@ const TrackPage = () => {
           <button type="button" className="tracks-btn" onClick={shuffleAll} disabled={!playable.length}>
             Shuffle
           </button>
+          {playable.length > 0 && (
+            <PlaylistMenu trackIds={playable.map((t) => t._id)} label="Save as playlist" />
+          )}
         </div>
       </header>
 
@@ -130,7 +136,10 @@ const TrackPage = () => {
                 </div>
                 <span className="track-duration">{formatDuration(track.duration)}</span>
                 {track.filePath ? (
-                  <PlayButton track={track} queue={playable} label={false} />
+                  <>
+                    <PlayButton track={track} queue={playable} label={false} />
+                    <PlaylistMenu trackIds={[track._id]} />
+                  </>
                 ) : (
                   <span className="track-noaudio">No audio</span>
                 )}
