@@ -45,3 +45,7 @@
   .track-duration { display: none; }
   .tracks-page .play-queue-btn { display: none; }
 }
+
+.tracks-page { text-align: left; }
+.tracks-page .tracks-state { text-align: center; }
+.track-info { align-items: flex-start; text-align: left; }

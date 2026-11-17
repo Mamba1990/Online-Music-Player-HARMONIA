@@ -25,3 +25,5 @@
   .track-details-cover { width: 120px; height: 120px; font-size: 48px; }
   .track-details-body h1 { font-size: 30px; }
 }
+
+.track-details { text-align: left; }
