@@ -1,0 +1,44 @@
+.play-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #3b6cff, #a24bff 55%, #ff5ca8);
+  box-shadow: 0 4px 16px rgba(162, 75, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.play-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(162, 75, 255, 0.5);
+}
+
+.play-queue-btn {
+  padding: 8px 14px;
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #d6ccff;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.play-queue-btn:hover {
+  color: #fff;
+  background: rgba(167, 139, 250, 0.18);
+}

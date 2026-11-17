@@ -12,9 +12,12 @@ import TrackDetailsPage from './pages/TrackDetailsPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import AudioPlayerPage from './pages/AudioPlayerPage'
+import { PlayerProvider } from './context/PlayerContext'
+import PlayerBar from './components/PlayerBar'
 
 function App() {
   return (
+    <PlayerProvider>
         <Router basename={import.meta.env.BASE_URL}>
       <div className="App">
         <Navbar />
@@ -50,8 +53,10 @@ function App() {
           </Routes>
         </div>
         <Footer />
+        <PlayerBar />
       </div>
     </Router>
+  </PlayerProvider>
   )
 }
 
