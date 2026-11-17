@@ -28,3 +28,10 @@ Thumbs.db
 .env
 **/.env
 !.env.example
+
+server/uploads/*
+!server/uploads/.gitkeep
+*.mp3
+*.wav
+*.flac
+*.m4a

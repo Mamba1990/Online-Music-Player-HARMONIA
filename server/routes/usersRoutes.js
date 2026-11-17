@@ -11,6 +11,10 @@ const isObjectId = (value) => typeof value === 'string' && /^[0-9a-fA-F]{24}$/.t
 const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
 const normalizeEmail = (email) => email.trim().toLowerCase();
 
+// Avatar : data URL PNG / JPEG / WebP, 120 000 caractères maximum (le client réduit l'image à 256 px)
+const AVATAR_PATTERN = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/;
+const AVATAR_MAX_LENGTH = 120000;
+
 // Ne renvoie jamais le hash du mot de passe
 const publicUser = (user) => {
     const { password, __v, ...rest } = user.toObject();
@@ -38,10 +42,51 @@ usersRouter.get('/profile', authMiddleware, async (req, res) => {
     }
 });
 
+// 1b- Changer sa photo de profil (déclaré AVANT /:id)
+usersRouter.put('/avatar', authMiddleware, async (req, res) => {
+    const { avatar } = req.body ?? {};
+
+    if (typeof avatar !== 'string' || avatar.length > AVATAR_MAX_LENGTH || !AVATAR_PATTERN.test(avatar)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Avatar must be a PNG, JPEG or WebP image of reasonable size.',
+        });
+    }
+
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+        user.avatar = avatar;
+        await user.save();
+        res.status(200).json({ success: true, user: publicUser(user) });
+    } catch (error) {
+        console.error('Error updating avatar:', error);
+        res.status(500).json({ success: false, message: 'Failed to update avatar.' });
+    }
+});
+
+// 1c- Supprimer sa photo de profil
+usersRouter.delete('/avatar', authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+        user.avatar = '';
+        await user.save();
+        res.status(200).json({ success: true, user: publicUser(user) });
+    } catch (error) {
+        console.error('Error removing avatar:', error);
+        res.status(500).json({ success: false, message: 'Failed to remove avatar.' });
+    }
+});
+
 // 2- Liste de tous les utilisateurs (admin uniquement : elle contient les emails)
 usersRouter.get('/', authMiddleware, adminMiddleware, async (req, res) => {
     try {
-        const users = await User.find().select('-password -__v').sort({ _id: -1 });
+        const users = await User.find().select('-password -__v -avatar').sort({ _id: -1 });
         res.status(200).json({ success: true, data: users });
     } catch (error) {
         console.error('Error fetching users:', error);

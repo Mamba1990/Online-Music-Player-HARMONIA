@@ -23,7 +23,7 @@ const LoginPage = () => {
     try {
       const response = await apiClient.post('/auth/login', formData)
       localStorage.setItem('token', response.data.token)
-      navigate('/profile')
+      navigate('/')
     } catch (err) {
       setError(
         err.response?.data?.message || 'Unable to reach the server. Please try again.'

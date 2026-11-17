@@ -26,6 +26,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use('/users/avatar', express.json({ limit: '150kb' }));
 app.use(express.json({ limit: '10kb' }));
 
 app.get('/', (req, res) => {
