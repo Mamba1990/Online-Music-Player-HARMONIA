@@ -137,3 +137,53 @@
   .tracks-page .track-row .pl-menu { flex: none; }
   .tracks-page .track-row { flex-wrap: nowrap; }
 }
+
+/* ---- Visibilité, auteur, likes, commentaires ---- */
+.pl-badge.is-private { color: #ffd6e5; background: rgba(255, 92, 138, 0.22); }
+
+.pl-author { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+.pl-author-name { color: #c9c4e8; }
+.pl-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.pl-check-row { display: inline-flex; align-items: center; gap: 6px; color: #d6ccff; font-size: 14px; }
+
+.pl-filters { display: flex; gap: 8px; margin-bottom: 16px; }
+.pl-filter {
+  padding: 7px 16px; font: inherit; font-size: 14px; font-weight: 600; color: #b9b2e6;
+  background: transparent; border: 1px solid rgba(167, 139, 250, 0.3); border-radius: 999px; cursor: pointer;
+}
+.pl-filter:hover { color: #fff; }
+.pl-filter.is-active { color: #fff; background: rgba(162, 75, 255, 0.28); border-color: rgba(162, 75, 255, 0.7); }
+
+.pl-like {
+  padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; color: #d6ccff; background: transparent;
+  border: 1px solid rgba(167, 139, 250, 0.4); border-radius: 999px; cursor: pointer;
+}
+.pl-like:hover:not(:disabled) { color: #fff; background: rgba(167, 139, 250, 0.18); }
+.pl-like.is-liked { color: #ff8fb1; border-color: rgba(255, 92, 138, 0.6); }
+.pl-like:disabled { opacity: 0.55; cursor: default; }
+
+.pl-comments { margin-top: 36px; }
+.pl-comments h2 { margin: 0 0 14px; font-size: 22px; }
+.pl-comment-form { margin-bottom: 14px; }
+.pl-textarea { display: block; width: 100%; resize: vertical; font-family: inherit; }
+.pl-comment-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.pl-counter { font-size: 12px; color: #8d86bd; }
+.pl-comment-list { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.pl-comment { padding: 12px 14px; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; background: rgba(255, 255, 255, 0.04); }
+.pl-comment-head { display: flex; align-items: center; gap: 10px; }
+.pl-comment-date { flex: 1; font-size: 12px; color: #8d86bd; }
+.pl-comment-text { margin: 8px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; color: #f4f1fb; }
+.pl-link { padding: 0; font: inherit; font-size: 13px; color: #ff8fb1; background: none; border: 0; cursor: pointer; }
+.pl-link:hover:not(:disabled) { text-decoration: underline; }
+.pl-link:disabled { opacity: 0.55; cursor: default; }
+.pl-hero-actions { flex-wrap: wrap; }
+
+/* Pastille d'avatar (même style que dans la barre de navigation, répété pour que ce fichier soit autonome) */
+.avatar {
+  display: inline-grid; flex: none; place-items: center; overflow: hidden; border-radius: 50%;
+  font-weight: 700; line-height: 1; color: #fff;
+  background: linear-gradient(135deg, #2f6bff, #a24dff 60%, #ff5fa8);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+}
+.avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
