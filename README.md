@@ -23,7 +23,7 @@ Harmonia is a full-stack online music player. Users can sign up, browse tracks, 
 | **Backend** | Node.js, Express 4, Mongoose |
 | **Database** | MongoDB |
 | **Auth** | JWT (5 h expiry), bcrypt password hashing, role-based access (`user` / `admin`) |
-| **Tests** | Mocha, Chai, Supertest (37 API tests) |
+| **Tests** | Mocha, Chai, Supertest (API integration tests) |
 | **Containers** | Docker Compose (client served by Nginx, server, MongoDB) |
 
 ---
@@ -34,10 +34,14 @@ Harmonia is a full-stack online music player. Users can sign up, browse tracks, 
 - **Roles**: regular users manage their own playlists, administrators manage tracks and users.
 - **Track catalogue**: browse and play tracks; admins upload audio files with metadata.
 - **Playlists**: create, edit and delete playlists; only the owner or an admin can modify one.
+- **Public or private playlists**: each playlist is private or public. Playlists created from the Tracks page are private by default. Private playlists are hidden from everyone else, and the owner can switch visibility at any time.
+- **Social features**: browse other users' public playlists (*All / Mine / From others*), like them, save a copy to your own library, and comment on them. The author's name and profile picture are shown on playlists and comments.
+- **Global audio player**: a persistent player bar with queue, shuffle and repeat that keeps playing while you navigate.
+- **Profile pictures**: upload or remove an avatar from the account menu (top right); you land on the home page after login.
 - **Secure uploads**: audio-only filter, 30 MB limit, randomly generated file names.
 - **Hardened API**: rate limiting on login and signup, security headers, input validation, no password leaks in responses.
 
-> 💡 **Roadmap highlights:** a global audio player that keeps playing while you navigate, and a Spotify integration. See [Roadmap](#-roadmap).
+> 💡 **Roadmap highlights:** a Spotify integration and persistent audio storage. See [Roadmap](#-roadmap).
 
 ---
 
@@ -255,17 +259,28 @@ curl -X POST http://localhost:4000/auth/login \
 | `GET` | `/users` | 🛡️ | List all users (passwords are never returned). |
 | `GET` | `/users/:id` | 🔑 | A user's profile (yourself, or any user as admin). |
 | `PUT` | `/users/:id` | 🔑 | Update your own `name`, `email` or `password` (changing the password requires `currentPassword`). The role cannot be changed. |
-| `DELETE` | `/users/:id` | 🔑 | Delete your own account, or any account as admin. The last admin cannot be deleted. |
+| `DELETE` | `/users/:id` | 🔑 | Delete your own account, or any account as admin. The last admin cannot be deleted. Your comments, likes and the comments on your playlists are deleted too. |
+| `PUT` | `/users/avatar` | 🔑 | Set your profile picture (`avatar`: PNG, JPEG or WebP data URL, 120 000 characters max). SVG is rejected. |
+| `DELETE` | `/users/avatar` | 🔑 | Remove your profile picture. |
+| `GET` | `/users/:id/avatar` | 🔓 | A user's profile picture as an image (cached for 24 h). `404` if there is none. |
 
 ### Playlists
 
 | Method | Endpoint | Access | Description |
 |---|---|---|---|
-| `GET` | `/playlists` | 🔓 | List playlists. |
-| `GET` | `/playlists/:id` | 🔓 | A playlist with its populated tracks. |
-| `POST` | `/playlists` | 🔑 | Create a playlist (`name`, optional `description` and `tracks`). |
-| `PUT` | `/playlists/:id` | 🔑 | Update a playlist (owner or admin). |
-| `DELETE` | `/playlists/:id` | 🔑 | Delete a playlist (owner or admin). |
+| `GET` | `/playlists` | 🔓 | List public playlists, plus your own when a token is sent. Each item includes `author`, `likesCount` and `liked`. |
+| `GET` | `/playlists/:id` | 🔓 | A playlist with its populated tracks. A private playlist returns `404` to anyone but its owner or an admin. |
+| `POST` | `/playlists` | 🔑 | Create a playlist (`name`, optional `description`, `tracks` and `isPublic`, which defaults to `true`). |
+| `PUT` | `/playlists/:id` | 🔑 | Update `name`, `description`, `tracks` or `isPublic` (owner or admin). |
+| `DELETE` | `/playlists/:id` | 🔑 | Delete a playlist and its comments (owner or admin). |
+| `POST` | `/playlists/:id/like` | 🔑 | Like a playlist. Returns `{ likesCount, liked }`. |
+| `DELETE` | `/playlists/:id/like` | 🔑 | Remove your like. |
+| `POST` | `/playlists/:id/copy` | 🔑 | Copy a playlist you can see into your library. The copy is private and named `<name> (copy)`. |
+| `GET` | `/playlists/:id/comments` | 🔓 | List comments, newest first, with their `author`. |
+| `POST` | `/playlists/:id/comments` | 🔑 | Add a comment (`text`, 500 characters max). Limited to 15 per minute per IP. |
+| `DELETE` | `/playlists/:id/comments/:commentId` | 🔑 | Delete a comment (its author, the playlist owner or an admin). |
+
+Playlists created before visibility existed stay public. Sending a token on the 🔓 routes is optional: it only lets the API show you your own private playlists.
 
 ### Tracks
 
@@ -300,9 +315,11 @@ Accepted formats: `mp3`, `wav`, `ogg`, `flac`, `m4a`, `aac` (30 MB maximum). Fil
 |---|---|
 | **Password storage** | bcrypt hashing, minimum 8 characters, hashes are never returned by the API |
 | **Tokens** | JWT with `audience` and `issuer` checks, 5 h expiry, server refuses to start without `JWT_SECRET` |
-| **Authorization** | Role checks (`admin`) and ownership checks on playlists and accounts |
+| **Authorization** | Role checks (`admin`) and ownership checks on playlists, comments and accounts |
+| **Playlist privacy** | Private playlists return `404` (not `403`) to other users, so their existence is not revealed |
+| **Avatars** | Only PNG, JPEG and WebP data URLs of a bounded size, SVG rejected, served with `nosniff` |
 | **Privilege escalation** | The signup route ignores any `role` sent by the client |
-| **Rate limiting** | Login: 10 failed attempts per 15 minutes per IP. Signup: 5 accounts per hour per IP |
+| **Rate limiting** | Login: 10 failed attempts per 15 minutes per IP. Signup: 5 accounts per hour per IP. Comments: 15 per minute per IP |
 | **Input validation** | Type checks on bodies and IDs (blocks NoSQL injection), `400` on invalid IDs |
 | **Uploads** | Audio-only filter, 30 MB limit, generated file names, invalid uploads are cleaned up |
 | **HTTP hardening** | `helmet` headers, CORS restricted to `CLIENT_URL`, JSON body size limit |
@@ -326,7 +343,9 @@ What is covered:
 
 - Auth: signup rules, role escalation attempt, login success and failures
 - Users: access control, profile, updates, last-admin protection
-- Playlists: ownership rules, validation, track references
+- Playlists: ownership rules, validation, track references, public/private visibility
+- Social: likes, copying a playlist, comments (permissions, limits) and cascade deletion
+- Avatars: upload validation, removal and public image endpoint
 - Tracks: admin-only changes, cascade cleanup on delete
 - Upload: authentication, file type and metadata validation, stored path
 
@@ -379,107 +398,3 @@ Distributed under the MIT License.
 - Email: hafsa.daoudim@gmail.com
 - GitHub: [@Mamba1990](https://github.com/Mamba1990)
 - Portfolio: https://hafsa-daoudim.gitlab.io/#hero
-
-## Social playlists
-
-Playlists are now shared, with privacy controls.
-
-### Features
-
-- **Public or private playlists.** Each playlist is private or public. New playlists created from the Tracks page (`+ Playlist` menu) are **private by default**; the Playlists page has a **Public** checkbox (off by default). Existing playlists stay public. The owner can switch visibility at any time from the playlist page.
-- **Browse other users' playlists.** The Playlists page lists your playlists and public playlists from other users, with *All / Mine / From others* filters. Private playlists are never visible to anyone else.
-- **Likes.** Any logged-in user can like or unlike a public playlist; the like count is shown on each card.
-- **Save to my playlists.** Copy someone else's public playlist into your own library. The copy is private and named `<name> (copy)`.
-- **Comments.** Any logged-in user can comment on a playlist they can see (500 characters max). Authors can delete their own comments, and playlist owners (and admins) can delete any comment on their playlist.
-- **Author name and avatar.** Playlists and comments show the author's name and profile picture.
-- **Editing stays owner-only.** Only the owner (or an admin) can rename, change visibility, add or remove tracks, or delete a playlist. Deleting a playlist also deletes its comments.
-
-### Privacy and security notes
-
-- A private playlist returns `404` (not `403`) to anyone who is not its owner, so its existence is not revealed.
-- The viewer is identified with an optional JWT: anonymous visitors can browse public playlists but cannot like, copy or comment.
-- Comment posting is rate-limited (15 requests per minute per IP).
-- Avatars are served by a public endpoint, cached for 24 hours, and sent with `X-Content-Type-Options: nosniff`.
-- Deleting a user account also deletes their comments and their likes, and removes the comments left on their playlists.
-
-### New API endpoints
-
-| Method | Route | Auth | Description |
-| --- | --- | --- | --- |
-| `GET` | `/playlists` | optional | Public playlists plus your own (with `likesCount`, `liked`, `author`) |
-| `GET` | `/playlists/:id` | optional | One playlist, `404` if private and not yours |
-| `POST` | `/playlists` | required | Create a playlist (`isPublic` optional, default `true` for API calls) |
-| `PUT` | `/playlists/:id` | owner / admin | Update name, description, tracks, `isPublic` |
-| `DELETE` | `/playlists/:id` | owner / admin | Delete the playlist and its comments |
-| `POST` | `/playlists/:id/like` | required | Like a playlist |
-| `DELETE` | `/playlists/:id/like` | required | Remove your like |
-| `POST` | `/playlists/:id/copy` | required | Copy a visible playlist into your library (private) |
-| `GET` | `/playlists/:id/comments` | optional | List comments (newest first) |
-| `POST` | `/playlists/:id/comments` | required | Add a comment (`text`, max 500 chars) |
-| `DELETE` | `/playlists/:id/comments/:commentId` | author / owner / admin | Delete a comment |
-| `GET` | `/users/:id/avatar` | public | Author's profile picture |
-
-### Profile pictures
-
-Users can upload a profile picture from the account menu (top right). Images are resized to 256 px on the client and stored in the user document, because the free hosting disk is ephemeral. PNG, JPEG and WebP are accepted; SVG is rejected.
-
-### Tests
-
-The backend test suite (Mocha, Chai, Supertest) runs against a real MongoDB database (`harmonia_test`) and now covers avatars, visibility, likes, copies, comments and cascade deletions:
-
-```bash
-cd server
-npm test
-```
-
-## Social playlists
-
-Playlists are now shared, with privacy controls.
-
-### Features
-
-- **Public or private playlists.** Each playlist is private or public. New playlists created from the Tracks page (`+ Playlist` menu) are **private by default**; the Playlists page has a **Public** checkbox (off by default). Existing playlists stay public. The owner can switch visibility at any time from the playlist page.
-- **Browse other users' playlists.** The Playlists page lists your playlists and public playlists from other users, with *All / Mine / From others* filters. Private playlists are never visible to anyone else.
-- **Likes.** Any logged-in user can like or unlike a public playlist; the like count is shown on each card.
-- **Save to my playlists.** Copy someone else's public playlist into your own library. The copy is private and named `<name> (copy)`.
-- **Comments.** Any logged-in user can comment on a playlist they can see (500 characters max). Authors can delete their own comments, and playlist owners (and admins) can delete any comment on their playlist.
-- **Author name and avatar.** Playlists and comments show the author's name and profile picture.
-- **Editing stays owner-only.** Only the owner (or an admin) can rename, change visibility, add or remove tracks, or delete a playlist. Deleting a playlist also deletes its comments.
-
-### Privacy and security notes
-
-- A private playlist returns `404` (not `403`) to anyone who is not its owner, so its existence is not revealed.
-- The viewer is identified with an optional JWT: anonymous visitors can browse public playlists but cannot like, copy or comment.
-- Comment posting is rate-limited (15 requests per minute per IP).
-- Avatars are served by a public endpoint, cached for 24 hours, and sent with `X-Content-Type-Options: nosniff`.
-- Deleting a user account also deletes their comments and their likes, and removes the comments left on their playlists.
-
-### New API endpoints
-
-| Method | Route | Auth | Description |
-| --- | --- | --- | --- |
-| `GET` | `/playlists` | optional | Public playlists plus your own (with `likesCount`, `liked`, `author`) |
-| `GET` | `/playlists/:id` | optional | One playlist, `404` if private and not yours |
-| `POST` | `/playlists` | required | Create a playlist (`isPublic` optional, default `true` for API calls) |
-| `PUT` | `/playlists/:id` | owner / admin | Update name, description, tracks, `isPublic` |
-| `DELETE` | `/playlists/:id` | owner / admin | Delete the playlist and its comments |
-| `POST` | `/playlists/:id/like` | required | Like a playlist |
-| `DELETE` | `/playlists/:id/like` | required | Remove your like |
-| `POST` | `/playlists/:id/copy` | required | Copy a visible playlist into your library (private) |
-| `GET` | `/playlists/:id/comments` | optional | List comments (newest first) |
-| `POST` | `/playlists/:id/comments` | required | Add a comment (`text`, max 500 chars) |
-| `DELETE` | `/playlists/:id/comments/:commentId` | author / owner / admin | Delete a comment |
-| `GET` | `/users/:id/avatar` | public | Author's profile picture |
-
-### Profile pictures
-
-Users can upload a profile picture from the account menu (top right). Images are resized to 256 px on the client and stored in the user document, because the free hosting disk is ephemeral. PNG, JPEG and WebP are accepted; SVG is rejected.
-
-### Tests
-
-The backend test suite (Mocha, Chai, Supertest) runs against a real MongoDB database (`harmonia_test`) and now covers avatars, visibility, likes, copies, comments and cascade deletions:
-
-```bash
-cd server
-npm test
-```
