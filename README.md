@@ -379,3 +379,55 @@ Distributed under the MIT License.
 - Email: hafsa.daoudim@gmail.com
 - GitHub: [@Mamba1990](https://github.com/Mamba1990)
 - Portfolio: https://hafsa-daoudim.gitlab.io/#hero
+
+## Social playlists
+
+Playlists are now shared, with privacy controls.
+
+### Features
+
+- **Public or private playlists.** Each playlist is private or public. New playlists created from the Tracks page (`+ Playlist` menu) are **private by default**; the Playlists page has a **Public** checkbox (off by default). Existing playlists stay public. The owner can switch visibility at any time from the playlist page.
+- **Browse other users' playlists.** The Playlists page lists your playlists and public playlists from other users, with *All / Mine / From others* filters. Private playlists are never visible to anyone else.
+- **Likes.** Any logged-in user can like or unlike a public playlist; the like count is shown on each card.
+- **Save to my playlists.** Copy someone else's public playlist into your own library. The copy is private and named `<name> (copy)`.
+- **Comments.** Any logged-in user can comment on a playlist they can see (500 characters max). Authors can delete their own comments, and playlist owners (and admins) can delete any comment on their playlist.
+- **Author name and avatar.** Playlists and comments show the author's name and profile picture.
+- **Editing stays owner-only.** Only the owner (or an admin) can rename, change visibility, add or remove tracks, or delete a playlist. Deleting a playlist also deletes its comments.
+
+### Privacy and security notes
+
+- A private playlist returns `404` (not `403`) to anyone who is not its owner, so its existence is not revealed.
+- The viewer is identified with an optional JWT: anonymous visitors can browse public playlists but cannot like, copy or comment.
+- Comment posting is rate-limited (15 requests per minute per IP).
+- Avatars are served by a public endpoint, cached for 24 hours, and sent with `X-Content-Type-Options: nosniff`.
+- Deleting a user account also deletes their comments and their likes, and removes the comments left on their playlists.
+
+### New API endpoints
+
+| Method | Route | Auth | Description |
+| --- | --- | --- | --- |
+| `GET` | `/playlists` | optional | Public playlists plus your own (with `likesCount`, `liked`, `author`) |
+| `GET` | `/playlists/:id` | optional | One playlist, `404` if private and not yours |
+| `POST` | `/playlists` | required | Create a playlist (`isPublic` optional, default `true` for API calls) |
+| `PUT` | `/playlists/:id` | owner / admin | Update name, description, tracks, `isPublic` |
+| `DELETE` | `/playlists/:id` | owner / admin | Delete the playlist and its comments |
+| `POST` | `/playlists/:id/like` | required | Like a playlist |
+| `DELETE` | `/playlists/:id/like` | required | Remove your like |
+| `POST` | `/playlists/:id/copy` | required | Copy a visible playlist into your library (private) |
+| `GET` | `/playlists/:id/comments` | optional | List comments (newest first) |
+| `POST` | `/playlists/:id/comments` | required | Add a comment (`text`, max 500 chars) |
+| `DELETE` | `/playlists/:id/comments/:commentId` | author / owner / admin | Delete a comment |
+| `GET` | `/users/:id/avatar` | public | Author's profile picture |
+
+### Profile pictures
+
+Users can upload a profile picture from the account menu (top right). Images are resized to 256 px on the client and stored in the user document, because the free hosting disk is ephemeral. PNG, JPEG and WebP are accepted; SVG is rejected.
+
+### Tests
+
+The backend test suite (Mocha, Chai, Supertest) runs against a real MongoDB database (`harmonia_test`) and now covers avatars, visibility, likes, copies, comments and cascade deletions:
+
+```bash
+cd server
+npm test
+```
