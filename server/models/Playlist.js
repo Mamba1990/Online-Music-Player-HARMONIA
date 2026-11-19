@@ -6,6 +6,10 @@ const playlistSchema = new mongoose.Schema(
         description: { type: String, trim: true },
         tracks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Track' }],
         createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        // Les playlists existantes restent publiques ; une playlist privée n'est visible que de son propriétaire et des admins
+        isPublic: { type: Boolean, default: true },
+        // Un like par utilisateur
+        likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     },
     { timestamps: true }
 );

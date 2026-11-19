@@ -81,7 +81,8 @@ const PlaylistMenu = ({ trackIds, label = '+ Playlist', className = '' }) => {
     const clean = name.trim()
     if (!clean) return
     run(async () => {
-      const created = await createPlaylist({ name: clean, tracks: trackIds })
+      // Privée par défaut : on la rend publique depuis la page Playlists
+      const created = await createPlaylist({ name: clean, tracks: trackIds, isPublic: false })
       setLists((all) => [created, ...(all || [])])
       setName('')
       setMessage({ type: 'ok', text: `Playlist “${created.name}” created.` })
@@ -141,6 +142,7 @@ const PlaylistMenu = ({ trackIds, label = '+ Playlist', className = '' }) => {
               Create
             </button>
           </form>
+          <p className="pl-pop-note">New playlists are private. You can make them public later.</p>
 
           {message && (
             <p className={`pl-pop-msg ${message.type === 'error' ? 'is-error' : 'is-ok'}`} role={message.type === 'error' ? 'alert' : 'status'}>

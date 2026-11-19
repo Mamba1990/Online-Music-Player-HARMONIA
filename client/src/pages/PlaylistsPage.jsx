@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AuthorChip from '../components/AuthorChip'
+import LikeButton from '../components/LikeButton'
 import { usePlayer } from '../context/PlayerContext'
 import { useCurrentUser } from '../hooks/useCurrentUser'
 import {
   canEdit,
+  copyPlaylist,
   createPlaylist,
   deletePlaylist,
   errMsg,
@@ -13,7 +16,14 @@ import {
 } from '../services/playlists'
 import '../components/Playlists.css'
 
+const FILTERS = [
+  { id: 'all', label: 'All' },
+  { id: 'mine', label: 'Mine' },
+  { id: 'others', label: 'From others' },
+]
+
 const PlaylistsPage = () => {
+  const navigate = useNavigate()
   const { user } = useCurrentUser()
   const { playTrack } = usePlayer()
   const [playlists, setPlaylists] = useState([])
@@ -21,9 +31,11 @@ const PlaylistsPage = () => {
   const [error, setError] = useState(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [makePublic, setMakePublic] = useState(false)
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState(null)
   const [confirmId, setConfirmId] = useState(null)
+  const [filter, setFilter] = useState('all')
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -42,11 +54,13 @@ const PlaylistsPage = () => {
     load()
   }, [load])
 
-  // Mes playlists d'abord
-  const sorted = useMemo(
-    () => [...playlists].sort((a, b) => Number(isMine(b, user)) - Number(isMine(a, user))),
-    [playlists, user]
-  )
+  // Mes playlists d'abord, puis le filtre choisi
+  const visible = useMemo(() => {
+    const sorted = [...playlists].sort((a, b) => Number(isMine(b, user)) - Number(isMine(a, user)))
+    if (filter === 'mine') return sorted.filter((p) => isMine(p, user))
+    if (filter === 'others') return sorted.filter((p) => !isMine(p, user))
+    return sorted
+  }, [playlists, user, filter])
 
   const handleCreate = async (e) => {
     e.preventDefault()
@@ -54,7 +68,7 @@ const PlaylistsPage = () => {
     setBusy(true)
     setNotice(null)
     try {
-      const created = await createPlaylist({ name: name.trim(), description })
+      const created = await createPlaylist({ name: name.trim(), description, isPublic: makePublic })
       setPlaylists((all) => [created, ...all])
       setName('')
       setDescription('')
@@ -78,6 +92,18 @@ const PlaylistsPage = () => {
     }
   }
 
+  const handleCopy = async (playlist) => {
+    setBusy(true)
+    setNotice(null)
+    try {
+      const copy = await copyPlaylist(playlist._id)
+      navigate(`/playlists/${copy._id}`)
+    } catch (err) {
+      setNotice({ type: 'error', text: errMsg(err) })
+      setBusy(false)
+    }
+  }
+
   const handleDelete = async (playlist) => {
     setBusy(true)
     setNotice(null)
@@ -92,6 +118,9 @@ const PlaylistsPage = () => {
       setBusy(false)
     }
   }
+
+  const updateLike = (id, result) =>
+    setPlaylists((all) => all.map((p) => (p._id === id ? { ...p, ...result } : p)))
 
   return (
     <div className="pl-page">
@@ -121,10 +150,29 @@ const PlaylistsPage = () => {
           maxLength={200}
           aria-label="Playlist description"
         />
+        <label className="pl-check-row">
+          <input type="checkbox" checked={makePublic} onChange={(e) => setMakePublic(e.target.checked)} />
+          Public
+        </label>
         <button type="submit" className="pl-btn pl-btn-main" disabled={busy || !name.trim()}>
           Create playlist
         </button>
       </form>
+
+      <div className="pl-filters" role="tablist" aria-label="Filter playlists">
+        {FILTERS.map((f) => (
+          <button
+            key={f.id}
+            type="button"
+            role="tab"
+            aria-selected={filter === f.id}
+            className={`pl-filter ${filter === f.id ? 'is-active' : ''}`}
+            onClick={() => setFilter(f.id)}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
 
       {notice && (
         <p className={`pl-notice ${notice.type === 'error' ? 'is-error' : 'is-ok'}`} role={notice.type === 'error' ? 'alert' : 'status'}>
@@ -139,12 +187,15 @@ const PlaylistsPage = () => {
           <p>{error}</p>
           <button type="button" className="pl-btn" onClick={load}>Try again</button>
         </div>
-      ) : sorted.length === 0 ? (
-        <p className="pl-state">No playlists yet. Create one above, or from the Tracks page.</p>
+      ) : visible.length === 0 ? (
+        <p className="pl-state">
+          {filter === 'others' ? 'Nobody else shared a playlist yet.' : 'No playlists yet. Create one above, or from the Tracks page.'}
+        </p>
       ) : (
         <ul className="pl-grid">
-          {sorted.map((playlist) => {
+          {visible.map((playlist) => {
             const count = (playlist.tracks || []).length
+            const mine = isMine(playlist, user)
             return (
               <li key={playlist._id} className="pl-card">
                 <div className="pl-cover" aria-hidden="true">♫</div>
@@ -153,14 +204,28 @@ const PlaylistsPage = () => {
                   <p className="pl-card-desc">{playlist.description || 'No description'}</p>
                   <p className="pl-card-meta">
                     {count} {count === 1 ? 'track' : 'tracks'}
-                    {isMine(playlist, user) && <span className="pl-badge">Yours</span>}
+                    <span className={`pl-badge ${playlist.isPublic ? '' : 'is-private'}`}>
+                      {playlist.isPublic ? 'Public' : 'Private'}
+                    </span>
+                    {mine ? <span className="pl-badge">Yours</span> : <AuthorChip author={playlist.author} prefix="by " />}
                   </p>
                 </div>
                 <div className="pl-card-actions">
+                  <LikeButton
+                    playlistId={playlist._id}
+                    liked={playlist.liked}
+                    count={playlist.likesCount}
+                    onChange={(result) => updateLike(playlist._id, result)}
+                  />
                   <button type="button" className="pl-btn pl-btn-main" onClick={() => handlePlay(playlist)} disabled={count === 0}>
                     ▶ Play all
                   </button>
                   <Link to={`/playlists/${playlist._id}`} className="pl-btn">Open</Link>
+                  {!mine && (
+                    <button type="button" className="pl-btn" onClick={() => handleCopy(playlist)} disabled={busy}>
+                      Save to mine
+                    </button>
+                  )}
                   {canEdit(playlist, user) &&
                     (confirmId === playlist._id ? (
                       <>

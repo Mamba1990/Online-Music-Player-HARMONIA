@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 import Playlist from '../models/Playlist.js';
+import Comment from '../models/Comment.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 import adminMiddleware from '../middleware/adminMiddleware.js';
 
@@ -80,6 +81,26 @@ usersRouter.delete('/avatar', authMiddleware, async (req, res) => {
     } catch (error) {
         console.error('Error removing avatar:', error);
         res.status(500).json({ success: false, message: 'Failed to remove avatar.' });
+    }
+});
+
+// 1d- Image de profil d'un utilisateur (publique : elle s'affiche à côté de ses playlists et commentaires)
+usersRouter.get('/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('avatar');
+        const match = user?.avatar && /^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(user.avatar);
+        if (!match) {
+            return res.status(404).json({ success: false, message: 'No avatar.' });
+        }
+        res.set({
+            'Content-Type': `image/${match[1]}`,
+            'Cache-Control': 'public, max-age=86400', // le client ajoute ?v=... pour forcer le rafraîchissement
+            'X-Content-Type-Options': 'nosniff',
+        });
+        res.send(Buffer.from(match[2], 'base64'));
+    } catch (error) {
+        console.error('Error fetching avatar:', error);
+        res.status(500).json({ success: false, message: 'Failed to fetch avatar.' });
     }
 });
 
@@ -198,7 +219,11 @@ usersRouter.delete('/:id', authMiddleware, async (req, res) => {
             }
         }
 
-        await Playlist.deleteMany({ createdBy: user._id }); // pas de playlists orphelines
+        // Pas de données orphelines : ses playlists (avec leurs commentaires), ses commentaires et ses likes
+        const owned = await Playlist.find({ createdBy: user._id }).select('_id');
+        await Comment.deleteMany({ $or: [{ author: user._id }, { playlist: { $in: owned.map((p) => p._id) } }] });
+        await Playlist.deleteMany({ createdBy: user._id });
+        await Playlist.updateMany({ likes: user._id }, { $pull: { likes: user._id } });
         await user.deleteOne();
 
         res.status(200).json({ success: true, message: 'User deleted successfully.' });

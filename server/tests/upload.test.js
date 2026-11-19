@@ -42,7 +42,7 @@ describe('Upload API', () => {
         const { token } = await createUser({ role: 'admin' });
         const res = await send(token).attach('audio', fakeAudio, { filename: 'My Song.mp3', contentType: 'audio/mpeg' });
 
-        expect(res.status).to.equal(201);
+        expect(res.status, JSON.stringify(res.body)).to.equal(201);
         expect(res.body.data.filePath).to.match(/^uploads\/[0-9a-f-]{36}\.mp3$/);
         expect(fs.existsSync(path.join(UPLOADS_DIR, path.basename(res.body.data.filePath)))).to.equal(true);
     });

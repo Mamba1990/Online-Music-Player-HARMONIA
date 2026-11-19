@@ -23,3 +23,12 @@ export const signupLimiter = rateLimit({
     skip: skipInTests,
     message: { success: false, message: 'Too many accounts created. Please try again later.' },
 });
+// Commentaires : 15 par minute et par IP (contre le spam)
+export const commentLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 15,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    skip: skipInTests,
+    message: { success: false, message: 'Too many comments. Please slow down.' },
+});
