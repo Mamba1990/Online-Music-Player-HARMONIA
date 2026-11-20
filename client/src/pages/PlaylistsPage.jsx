@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthorChip from '../components/AuthorChip'
 import LikeButton from '../components/LikeButton'
+import apiClient from '../api/axios'
 import { usePlayer } from '../context/PlayerContext'
 import { useCurrentUser } from '../hooks/useCurrentUser'
 import {
@@ -36,6 +37,12 @@ const PlaylistsPage = () => {
   const [notice, setNotice] = useState(null)
   const [confirmId, setConfirmId] = useState(null)
   const [filter, setFilter] = useState('all')
+  // Choix des pistes avant la création
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [tracks, setTracks] = useState(null)
+  const [tracksError, setTracksError] = useState('')
+  const [trackQuery, setTrackQuery] = useState('')
+  const [selected, setSelected] = useState([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -54,6 +61,32 @@ const PlaylistsPage = () => {
     load()
   }, [load])
 
+  const togglePicker = async () => {
+    const next = !pickerOpen
+    setPickerOpen(next)
+    if (next && tracks === null) {
+      setTracksError('')
+      try {
+        const response = await apiClient.get('/tracks')
+        setTracks(response.data?.data || [])
+      } catch (err) {
+        console.error('Error fetching tracks:', err)
+        setTracksError('Could not load the tracks.')
+        setTracks([])
+      }
+    }
+  }
+
+  const toggleTrack = (id) =>
+    setSelected((all) => (all.includes(id) ? all.filter((x) => x !== id) : [...all, id]))
+
+  const pickable = useMemo(() => {
+    const q = trackQuery.trim().toLowerCase()
+    const list = tracks || []
+    if (!q) return list
+    return list.filter((t) => t.title?.toLowerCase().includes(q) || t.artist?.toLowerCase().includes(q))
+  }, [tracks, trackQuery])
+
   // Mes playlists d'abord, puis le filtre choisi
   const visible = useMemo(() => {
     const sorted = [...playlists].sort((a, b) => Number(isMine(b, user)) - Number(isMine(a, user)))
@@ -68,11 +101,20 @@ const PlaylistsPage = () => {
     setBusy(true)
     setNotice(null)
     try {
-      const created = await createPlaylist({ name: name.trim(), description, isPublic: makePublic })
+      const created = await createPlaylist({ name: name.trim(), description, isPublic: makePublic, tracks: selected })
       setPlaylists((all) => [created, ...all])
       setName('')
       setDescription('')
-      setNotice({ type: 'ok', text: `Playlist “${created.name}” created. Add tracks from the Tracks page.` })
+      const added = selected.length
+      setSelected([])
+      setTrackQuery('')
+      setPickerOpen(false)
+      setNotice({
+        type: 'ok',
+        text: added
+          ? `Playlist “${created.name}” created with ${added} ${added === 1 ? 'track' : 'tracks'}.`
+          : `Playlist “${created.name}” created. You can add tracks from here or from the Tracks page.`,
+      })
     } catch (err) {
       setNotice({ type: 'error', text: errMsg(err) })
     } finally {
@@ -157,6 +199,52 @@ const PlaylistsPage = () => {
         <button type="submit" className="pl-btn pl-btn-main" disabled={busy || !name.trim()}>
           Create playlist
         </button>
+        <div className="pl-picker">
+          <button
+            type="button"
+            className="pl-btn"
+            onClick={togglePicker}
+            aria-expanded={pickerOpen}
+            aria-controls="pl-picker-panel"
+          >
+            {pickerOpen ? 'Hide tracks' : 'Add tracks'}
+            {selected.length > 0 && ` (${selected.length} selected)`}
+          </button>
+          {pickerOpen && (
+            <div className="pl-picker-panel" id="pl-picker-panel">
+              <input
+                type="search"
+                className="pl-input"
+                value={trackQuery}
+                onChange={(e) => setTrackQuery(e.target.value)}
+                placeholder="Search by title or artist"
+                aria-label="Search tracks"
+              />
+              {tracks === null ? (
+                <p className="pl-pop-note" role="status">Loading tracks…</p>
+              ) : tracksError ? (
+                <p className="pl-pop-note is-error" role="alert">{tracksError}</p>
+              ) : pickable.length === 0 ? (
+                <p className="pl-pop-note">No track found.</p>
+              ) : (
+                <ul className="pl-picker-list">
+                  {pickable.map((track) => {
+                    const on = selected.includes(track._id)
+                    return (
+                      <li key={track._id}>
+                        <label className={`pl-picker-item ${on ? 'is-on' : ''}`}>
+                          <input type="checkbox" checked={on} onChange={() => toggleTrack(track._id)} />
+                          <span className="pl-pop-name">{track.title}</span>
+                          <span className="pl-pop-count">{track.artist}</span>
+                        </label>
+                      </li>
+                    )
+                  })}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
       </form>
 
       <div className="pl-filters" role="tablist" aria-label="Filter playlists">
