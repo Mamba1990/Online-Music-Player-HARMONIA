@@ -8,11 +8,16 @@ import tracksRouter from './routes/tracksRoutes.js';
 import usersRouter from './routes/usersRoutes.js';
 import authRouter from './routes/auth.js';
 import uploadRouter from './routes/uploadRoutes.js';
+import { apiLimiter } from './middleware/rateLimiters.js';
 
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Derrière le proxy de Render : on lit la vraie IP du visiteur,
+// sinon toutes les limites de débit seraient partagées entre tous les utilisateurs.
+app.set('trust proxy', 1);
 
 
 // En-têtes de sécurité. "cross-origin" est indispensable : le front (port 3000)
@@ -26,6 +31,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(apiLimiter);
 app.use('/users/avatar', express.json({ limit: '150kb' }));
 app.use(express.json({ limit: '10kb' }));
 
@@ -56,4 +62,3 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
-

@@ -32,3 +32,11 @@ export const commentLimiter = rateLimit({
     skip: skipInTests,
     message: { success: false, message: 'Too many comments. Please slow down.' },
 });
+export const apiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 120,                       // 120 requêtes par minute par IP
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    skip: skipInTests,
+    message: { success: false, message: 'Too many requests, please slow down.' },
+});
