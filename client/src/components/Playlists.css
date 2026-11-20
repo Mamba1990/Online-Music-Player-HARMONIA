@@ -201,3 +201,62 @@
 .pl-picker-item:hover { background: rgba(127, 140, 255, 0.18); }
 .pl-picker-item.is-on { background: rgba(162, 75, 255, 0.2); }
 .pl-picker-item input { accent-color: #a24bff; }
+
+/* ======== Mobile : Tracks, Playlists, détail d'une playlist ======== */
+.tracks-page, .track-details { text-align: left; }
+
+@media (max-width: 640px) {
+  /* --- Page Tracks --- */
+  .tracks-page { padding: 24px 16px 40px; }
+  .tracks-head { align-items: stretch; }
+  .tracks-actions { width: 100%; gap: 8px; }
+  .tracks-actions .tracks-btn { flex: 1 1 0; padding: 10px 12px; font-size: 14px; text-align: center; }
+  .tracks-actions .pl-menu { flex: 1 1 100%; }
+  .tracks-actions .pl-menu .pl-add-btn { width: 100%; padding: 10px 12px; font-size: 14px; }
+  .track-row { gap: 10px; padding: 10px; }
+  .track-cover { width: 40px; height: 40px; font-size: 17px; border-radius: 10px; }
+  .track-title { font-size: 16px; }
+  .track-row .play-btn { width: 40px; height: 40px; padding: 0; justify-content: center; }
+  /* « + Playlist » devient un simple bouton « + » (le texte reste lisible par les lecteurs d'écran) */
+  .track-row .pl-add-btn {
+    display: grid; place-items: center; width: 40px; height: 40px; padding: 0; font-size: 0;
+  }
+  .track-row .pl-add-btn::before { content: '+'; font-size: 22px; line-height: 1; }
+
+  /* --- Page Playlists --- */
+  .pl-page { padding: 24px 16px 40px; }
+  .pl-create { flex-direction: column; align-items: stretch; gap: 10px; }
+  .pl-create .pl-input { min-width: 0; width: 100%; flex: none; }
+  .pl-create .pl-btn-main { width: 100%; padding: 12px 16px; }
+  .pl-create .pl-btn { width: 100%; }
+  .pl-filters { overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .pl-filters::-webkit-scrollbar { display: none; }
+  .pl-filter { flex: none; }
+  .pl-card { align-items: flex-start; gap: 12px; padding: 12px; }
+  .pl-cover { width: 48px; height: 48px; font-size: 20px; border-radius: 12px; }
+  .pl-card-body { flex: 1 1 0; min-width: 0; }
+  .pl-card-title { display: block; overflow-wrap: anywhere; }
+  .pl-card-actions { width: 100%; gap: 8px; }
+  .pl-card-actions .pl-btn, .pl-card-actions .pl-like { flex: 1 1 auto; padding: 9px 12px; font-size: 13px; text-align: center; }
+
+  /* --- Détail d'une playlist --- */
+  .pl-hero { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .pl-cover-big { width: 96px; height: 96px; font-size: 40px; border-radius: 20px; }
+  .pl-hero-body { width: 100%; }
+  .pl-page h1 { overflow-wrap: anywhere; }
+  .pl-hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pl-hero-actions .pl-btn, .pl-hero-actions .pl-like { width: 100%; padding: 10px 12px; font-size: 14px; text-align: center; }
+  .pl-track { gap: 10px; padding: 8px 10px; }
+  .pl-track .play-btn { width: 38px; height: 38px; padding: 0; justify-content: center; }
+  .pl-track .play-queue-btn { display: none; }
+  .pl-track .pl-btn { padding: 7px 12px; font-size: 13px; }
+  .pl-comments { margin-top: 28px; }
+  .pl-comment-head { flex-wrap: wrap; row-gap: 4px; }
+  .pl-picker-list { max-height: 220px; }
+  .pl-pop { position: fixed; left: 16px; right: 16px; width: auto; }
+}
+
+@media (max-width: 360px) {
+  .tracks-page h1, .pl-page h1 { font-size: 28px; }
+  .pl-hero-actions { grid-template-columns: 1fr; }
+}
